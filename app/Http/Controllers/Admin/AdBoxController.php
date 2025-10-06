@@ -23,28 +23,20 @@ class AdBoxController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'url' => 'required|url',
-            'html_content' => 'required|string',
-            'is_active' => 'boolean',
-            'is_national' => 'boolean',
-            'location_name' => 'nullable|string|max:255',
-            'latitude' => 'nullable|numeric',
-            'longitude' => 'nullable|numeric',
-            'radius_miles' => 'nullable|integer|min:1|max:500',
-            'rotation_order' => 'nullable|integer',
+            'url' => 'required|url|max:500',
+            'description' => 'nullable|string|max:500',
+            'html_content' => 'nullable|string|max:10000',
+            'order' => 'nullable|integer|min:0',
+            'active' => 'nullable|boolean',
         ]);
 
         AdBox::create([
             'title' => $validated['title'],
             'url' => $validated['url'],
-            'html_content' => $validated['html_content'],
-            'is_active' => $validated['is_active'] ?? true,
-            'is_national' => $validated['is_national'] ?? false,
-            'location_name' => $validated['location_name'] ?? null,
-            'latitude' => $validated['latitude'] ?? null,
-            'longitude' => $validated['longitude'] ?? null,
-            'radius_miles' => $validated['radius_miles'] ?? null,
-            'rotation_order' => $validated['rotation_order'] ?? 0,
+            'description' => $validated['description'] ?? null,
+            'html_content' => $validated['html_content'] ?? null,
+            'order' => $validated['order'] ?? 0,
+            'is_active' => $request->has('active') && $request->active == '1',
         ]);
 
         return redirect()->route('admin.ad-boxes.index')
@@ -60,28 +52,20 @@ class AdBoxController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'url' => 'required|url',
-            'html_content' => 'required|string',
-            'is_active' => 'boolean',
-            'is_national' => 'boolean',
-            'location_name' => 'nullable|string|max:255',
-            'latitude' => 'nullable|numeric',
-            'longitude' => 'nullable|numeric',
-            'radius_miles' => 'nullable|integer|min:1|max:500',
-            'rotation_order' => 'nullable|integer',
+            'url' => 'required|url|max:500',
+            'description' => 'nullable|string|max:500',
+            'html_content' => 'nullable|string|max:10000',
+            'order' => 'nullable|integer|min:0',
+            'active' => 'nullable|boolean',
         ]);
 
         $adBox->update([
             'title' => $validated['title'],
             'url' => $validated['url'],
-            'html_content' => $validated['html_content'],
-            'is_active' => $validated['is_active'] ?? true,
-            'is_national' => $validated['is_national'] ?? false,
-            'location_name' => $validated['location_name'] ?? null,
-            'latitude' => $validated['latitude'] ?? null,
-            'longitude' => $validated['longitude'] ?? null,
-            'radius_miles' => $validated['radius_miles'] ?? null,
-            'rotation_order' => $validated['rotation_order'] ?? 0,
+            'description' => $validated['description'] ?? null,
+            'html_content' => $validated['html_content'] ?? null,
+            'order' => $validated['order'] ?? $adBox->order,
+            'is_active' => $request->has('active') && $request->active == '1',
         ]);
 
         return redirect()->route('admin.ad-boxes.index')

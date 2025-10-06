@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('trivia_code_id')->constrained()->cascadeOnDelete();
             $table->string('ip_address')->nullable();
             $table->text('user_agent')->nullable();
-            $table->timestamp('viewed_at');
             $table->timestamps();
         });
     }

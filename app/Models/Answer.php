@@ -13,6 +13,11 @@ class Answer extends Model
         'answer',
     ];
 
+    protected $casts = [
+        'trivia_code_id' => 'integer',
+        'order' => 'integer',
+    ];
+
     public function triviaCode(): BelongsTo
     {
         return $this->belongsTo(TriviaCode::class);

@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Ad Boxes
             </h2>
-            <a href="{{ route('admin.ad-boxes.create') }}" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+            <a href="{{ route('admin.ad-boxes.create') }}" class="bg-grass hover:bg-grass-700 text-white font-bold py-2 px-4 rounded">
                 Add New Ad
             </a>
         </div>
@@ -36,7 +36,7 @@
                             <tr>
                                 <td class="px-6 py-4 text-sm text-gray-900">{{ $ad->title }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-500">
-                                    <a href="{{ $ad->url }}" target="_blank" class="text-purple-600 hover:text-purple-900">
+                                    <a href="{{ $ad->url }}" target="_blank" class="text-grass hover:text-grass-900">
                                         {{ Str::limit($ad->url, 40) }}
                                     </a>
                                 </td>
@@ -58,7 +58,7 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="{{ route('admin.ad-boxes.edit', $ad) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
+                                    <a href="{{ route('admin.ad-boxes.edit', $ad) }}" class="text-forest hover:text-forest-900 mr-3">Edit</a>
                                     <form action="{{ route('admin.ad-boxes.destroy', $ad) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure?')">
                                         @csrf
                                         @method('DELETE')

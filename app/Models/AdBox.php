@@ -9,6 +9,7 @@ class AdBox extends Model
     protected $fillable = [
         'title',
         'url',
+        'description',
         'image_path',
         'html_content',
         'order',
@@ -18,6 +19,8 @@ class AdBox extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+        'order' => 'integer',
+        'click_count' => 'integer',
     ];
 
     public function incrementClicks(): void

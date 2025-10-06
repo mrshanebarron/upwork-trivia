@@ -86,7 +86,7 @@
                         </div>
 
                         <div class="flex items-center justify-between">
-                            <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            <button type="submit" class="bg-grass hover:bg-grass-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                 Update
                             </button>
                             <a href="{{ route('admin.ad-boxes.index') }}" class="text-gray-600 hover:text-gray-800">Cancel</a>

@@ -11,11 +11,6 @@ class CodeView extends Model
         'trivia_code_id',
         'ip_address',
         'user_agent',
-        'viewed_at',
-    ];
-
-    protected $casts = [
-        'viewed_at' => 'datetime',
     ];
 
     public function triviaCode(): BelongsTo

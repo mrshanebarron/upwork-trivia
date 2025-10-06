@@ -33,7 +33,7 @@ class DemoDataSeeder extends Seeder
         \App\Models\AdBox::create([
             'title' => 'Visit Our Website',
             'url' => 'https://example.com',
-            'html_content' => '<div class="bg-blue-500 text-white p-4 rounded"><h3 class="font-bold">Visit Our Website</h3><p>Click here to learn more!</p></div>',
+            'html_content' => '<div class="bg-blue-500 text-white p-4 rounded"><h3 class="font-bold">Visit Our Website</h3><p>Click here to learn more</p></div>',
             'order' => 1,
             'is_active' => true,
         ]);
@@ -41,7 +41,7 @@ class DemoDataSeeder extends Seeder
         \App\Models\AdBox::create([
             'title' => 'Special Offer',
             'url' => 'https://example.com/offer',
-            'html_content' => '<div class="bg-green-500 text-white p-4 rounded"><h3 class="font-bold">Special Offer!</h3><p>Get 20% off today</p></div>',
+            'html_content' => '<div class="bg-green-500 text-white p-4 rounded"><h3 class="font-bold">Special Offer</h3><p>Get 20% off today</p></div>',
             'order' => 2,
             'is_active' => true,
         ]);

@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Trivia Codes
             </h2>
-            <a href="{{ route('admin.trivia-codes.create') }}" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+            <a href="{{ route('admin.trivia-codes.create') }}" class="bg-forest hover:bg-forest-700 text-white font-bold py-2 px-4 rounded">
                 Add New Code
             </a>
         </div>
@@ -37,12 +37,12 @@
                                 <td class="px-6 py-4 text-sm text-gray-900">{{ $code->title }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $code->answers_count }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $code->active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                        {{ $code->active ? 'Active' : 'Inactive' }}
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $code->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        {{ $code->is_active ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="{{ route('admin.trivia-codes.edit', $code) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
+                                    <a href="{{ route('admin.trivia-codes.edit', $code) }}" class="text-forest hover:text-forest-900 mr-3">Edit</a>
                                     <form action="{{ route('admin.trivia-codes.destroy', $code) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure?')">
                                         @csrf
                                         @method('DELETE')

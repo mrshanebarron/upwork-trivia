@@ -36,7 +36,7 @@
 
                         <div class="mb-4">
                             <label class="flex items-center">
-                                <input type="checkbox" name="active" value="1" {{ old('active', $triviaCode->active) ? 'checked' : '' }} class="rounded">
+                                <input type="checkbox" name="active" value="1" {{ old('active', $triviaCode->is_active) ? 'checked' : '' }} class="rounded">
                                 <span class="ml-2 text-gray-700">Active</span>
                             </label>
                         </div>
@@ -46,7 +46,7 @@
                             <div id="answers">
                                 @foreach($triviaCode->answers as $answer)
                                 <div class="answer-row flex mb-2">
-                                    <input type="text" name="answers[]" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="{{ $answer->answer_text }}">
+                                    <input type="text" name="answers[]" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="{{ $answer->answer }}">
                                     <button type="button" onclick="removeAnswer(this)" class="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Remove</button>
                                 </div>
                                 @endforeach
@@ -55,7 +55,7 @@
                         </div>
 
                         <div class="flex items-center justify-between">
-                            <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            <button type="submit" class="bg-grass hover:bg-grass-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                 Update
                             </button>
                             <a href="{{ route('admin.trivia-codes.index') }}" class="text-gray-600 hover:text-gray-800">Cancel</a>

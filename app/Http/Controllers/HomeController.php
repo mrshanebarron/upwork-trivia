@@ -25,7 +25,7 @@ class HomeController extends Controller
         ]);
 
         $triviaCode = TriviaCode::where('code', $request->code)
-            ->where('active', true)
+            ->where('is_active', true)
             ->with('answers')
             ->first();
 
@@ -46,7 +46,7 @@ class HomeController extends Controller
             'found' => true,
             'title' => $triviaCode->title,
             'description' => $triviaCode->description,
-            'answers' => $triviaCode->answers->map(fn($a) => $a->answer_text)
+            'answers' => $triviaCode->answers->sortBy('order')->map(fn($a) => $a->answer)->values()
         ]);
     }
 

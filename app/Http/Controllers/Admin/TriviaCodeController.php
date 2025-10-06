@@ -25,21 +25,21 @@ class TriviaCodeController extends Controller
             'code' => 'required|string|size:4|unique:trivia_codes',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'active' => 'boolean',
+            'active' => 'nullable|boolean',
             'answers' => 'required|array|min:1',
-            'answers.*' => 'required|string'
+            'answers.*' => 'required|string|max:1000'
         ]);
 
         $triviaCode = TriviaCode::create([
             'code' => $validated['code'],
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
-            'active' => $validated['active'] ?? true,
+            'is_active' => $request->has('active') && $request->active == '1',
         ]);
 
         foreach ($validated['answers'] as $index => $answerText) {
             $triviaCode->answers()->create([
-                'answer_text' => $answerText,
+                'answer' => $answerText,
                 'order' => $index + 1
             ]);
         }
@@ -60,23 +60,23 @@ class TriviaCodeController extends Controller
             'code' => 'required|string|size:4|unique:trivia_codes,code,' . $triviaCode->id,
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'active' => 'boolean',
+            'active' => 'nullable|boolean',
             'answers' => 'required|array|min:1',
-            'answers.*' => 'required|string'
+            'answers.*' => 'required|string|max:1000'
         ]);
 
         $triviaCode->update([
             'code' => $validated['code'],
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
-            'active' => $validated['active'] ?? true,
+            'is_active' => $request->has('active') && $request->active == '1',
         ]);
 
         $triviaCode->answers()->delete();
 
         foreach ($validated['answers'] as $index => $answerText) {
             $triviaCode->answers()->create([
-                'answer_text' => $answerText,
+                'answer' => $answerText,
                 'order' => $index + 1
             ]);
         }
