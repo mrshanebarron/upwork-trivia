@@ -1,10 +1,435 @@
-# Trivia Answer Lookup PWA - Upwork Demo Prototype
+# Rick's Doggy Bag Trivia System
+
+---
+
+## 🚨 CRITICAL CLIENT CONTEXT
+
+**Client:** Rick
+**Upwork Spend:** $100,000+
+**Relationship:** Local (next town over), met over pizza & beer
+**Stakes:** Local reputation + long-term partnership potential
+**Payment Status:** Already paid for Phase 1, approved Phase 2
+
+**Business Background:**
+- Former property manager who identified opportunity: communities buy massive quantities of doggy bags
+- Also selling solar panel lights to same market (dog station accessories)
+- B2B model: sells to property managers, trivia adds resident engagement value
+- Vision: Eventually bring in sponsors (Purina, Petco, Chewy) to fund gift cards and advertise
+
+**Why This Matters:**
+- Rick has $100k+ Upwork history - can't afford failures
+- Local reputation on the line
+- Building sponsorship platform disguised as trivia site
+- Foundation must prove ROI for future sponsor pitches
+
+---
+
+## 📚 PROJECT DOCUMENTATION
+
+**Core Documents:**
+- **CLAUDE.md** (this file) - Complete project overview and requirements
+- **GIFT_CARD_API_RESEARCH.md** - Detailed API comparison, costs, implementation guide
+  - ✅ Recommendation: Tremendous ($0 fees, 2000+ options, recipient support)
+  - Cost analysis: $300-309/month for 30 winners
+  - Laravel integration code included
+- **MVP_REQUIREMENTS.md** - Complete feature breakdown and launch checklist
+  - MVP blockers (legal, tie-breaking, delivery, location tracking)
+  - Security requirements (CAPTCHA, 2FA, audit logs)
+  - Analytics dashboard specs
+  - 6-week implementation timeline
+
+**Session Progress (Oct 8, 2025):**
+- ✅ Gathered complete Phase 2 requirements from Rick meeting
+- ✅ Researched gift card APIs (5 providers analyzed)
+- ✅ Identified 14 critical gaps in original plan
+- ✅ Categorized features into MVP vs Phase 2
+- ⏳ Ready to design database schema and begin development
+
+---
+
+## PHASE 1: CODE LOOKUP SYSTEM (COMPLETED ✅)
 
 **Job ID:** 021974205472992779510
-**Built for:** Upwork proposal demonstration
-**Stack:** Laravel 12, Filament 3, Livewire 3, Tailwind CSS
+**Delivery:** Same night, ~4 hours
+**Status:** Live at https://trivia.sbarron.com
 
-## Demo Credentials
+**What Was Built:**
+- 4-digit code entry system
+- Admin panel (Filament 3) for managing codes/answers/ads
+- PWA capabilities
+- Analytics tracking
+
+**Current Stack:**
+- Laravel 12, Filament 3, Livewire 3, Tailwind CSS, SQLite
+
+**Admin Credentials:**
+- URL: http://upwork-trivia.test/admin
+- Email: admin@upwork-demo.com
+- Password: DemoPass2024!
+
+---
+
+## PHASE 2: GOLDEN QUESTION CONTEST SYSTEM (NEW PROJECT)
+
+### Overview
+
+Two separate but integrated systems:
+
+**1. BAG SYSTEM (Enhanced from Phase 1):**
+- Each roll of doggy bags = same trivia questions printed
+- Each bag has 3 things printed:
+  - QR code → `https://trivia.sbarron.com?code=1234` (auto-loads)
+  - Website URL → `https://trivia.sbarron.com`
+  - 4-digit code → `1234` (for manual entry)
+- Bag QR scan → Shows bag's questions + ads + **TODAY'S GOLDEN QUESTION** at top
+
+**2. STICKER GOLDEN QUESTION (New Contest):**
+- Sticker placed on doggy bag **dispensers** (the containers at dog stations)
+- QR code → Homepage with full animated experience
+- Daily contest: First correct answer wins $10 gift card
+- Random time rotation (prevents gaming the system)
+- Requires login, geolocation, anti-cheating measures
+
+---
+
+### Business Model Progression
+
+**Current State:** Rick funds $10 gift cards himself
+**Future Vision:** Purina/Petco/Chewy sponsors fund prizes, Rick provides platform + analytics
+
+**Rick's B2B Sales Strategy:**
+- Sells bags + solar lights to property managers
+- Differentiator: "Our bags provide resident engagement + analytics"
+- Properties get amenity value: "Our dog stations have daily trivia with prizes"
+- Analytics/heatmaps = proof of ROI for future sponsor pitches
+
+---
+
+### Design Vision (Shane's Surprise for Rick)
+
+**Visual Theme:**
+- Cartoon style website
+- Green grass + sky background
+- 3D plane flying by occasionally
+- Moving clouds animation
+- **Animated puppy character** next to glassmorphism info window
+- Shane is creating all assets: puppy, plane, clouds, background
+- **Puppy will appear on sticker AND website** (Rick doesn't know - surprise bonus!)
+
+**Technical Approach:**
+- Glassmorphism window for content (`backdrop-filter: blur()`)
+- GSAP or Three.js for complex animations
+- GPU-accelerated only (`transform`, `opacity`)
+- Mobile-first (QR scans = primarily mobile users)
+
+---
+
+### Page Structure & User Flow
+
+**HOMEPAGE (Sticker QR Scan):**
+```
+┌─────────────────────────────────────┐
+│  [Animated puppy, plane, clouds]    │
+│  🏆 TODAY'S GOLDEN QUESTION         │
+│  [Glassmorphism window]             │
+│  "First correct answer wins $10!"   │
+│  [Scan QR at dog stations to play]  │
+└─────────────────────────────────────┘
+
+┌─────────────────────────────────────┐
+│  📢 SPONSORED BY: [Future Sponsor]  │
+│  [Rick's ad system]                 │
+└─────────────────────────────────────┐
+
+┌─────────────────────────────────────┐
+│  📢 ADVERTISEMENT BOX 2             │
+└─────────────────────────────────────┘
+```
+
+**BAG QR CODE PAGE (Code Auto-Loaded):**
+```
+┌─────────────────────────────────────┐
+│  🏆 TODAY'S GOLDEN QUESTION         │
+│  [Glassmorphism window with puppy]  │
+│  "What breed is known as..."        │
+│  [Multiple choice: A, B, C, D]      │
+│  [Answer input if logged in]        │
+└─────────────────────────────────────┘
+
+┌─────────────────────────────────────┐
+│  📢 ADVERTISEMENT BOX 1             │
+│  (Rick's existing ad system)        │
+└─────────────────────────────────────┘
+
+┌─────────────────────────────────────┐
+│  📢 ADVERTISEMENT BOX 2             │
+└─────────────────────────────────────┘
+
+┌─────────────────────────────────────┐
+│  📝 YOUR BAG'S TRIVIA QUESTIONS     │
+│  Code #1234                         │
+│  • Question 1: Answer               │
+│  • Question 2: Answer               │
+│  • Question 3: Answer               │
+└─────────────────────────────────────┘
+```
+
+**Homepage Purpose:**
+- Teases Golden Question ("available at participating locations")
+- Showcases full animated puppy experience
+- Creates FOMO - drives scans at dog stations
+- Premium sponsor ad placement
+
+---
+
+### Core Features & Requirements
+
+#### 1. Golden Question Contest System
+- **Multiple choice answers** (A, B, C, D) - no text parsing issues
+- First correct answer wins $10 gift card
+- Question rotates at **random time each day** (prevents gaming)
+- Admin manages questions, answers, correct option, rotation schedule
+
+#### 2. User Authentication & Tracking
+- Custom login system (NOT Filament - customer-facing)
+- User dashboard shows:
+  - Winnings history (date, question, gift card status)
+  - Gift card redemption codes/links
+  - **Direct customer service link to card provider** (deflect support from Rick)
+- Green background placeholder (Shane provides assets later)
+
+#### 3. Anti-Cheating System
+- **One guess per IP per day** (prevents anonymous spam from same location)
+- **One guess per user per day** (prevents multiple attempts)
+- **30-day win cooldown** (can only win once per month)
+- Store IP address with each submission
+- Validation checks:
+  - Has this IP submitted today for this question?
+  - Has this user submitted today?
+  - Has this user won in last 30 days?
+
+#### 4. Geolocation Tracking
+- Capture location on QR scan
+- Store with submission data
+- Used for analytics/heatmap
+- Validates users are at physical dog stations
+
+#### 5. Gift Card API Integration
+- **Research criteria:**
+  - Provider with customer-facing support portal
+  - API includes support ticket creation or direct contact links
+  - Real-time delivery status tracking
+  - Clear redemption instructions
+  - Automated $10 distribution to winners
+- **Options to research:** Amazon, Visa, Tango Card, etc.
+- Must deflect customer service burden away from Rick
+
+#### 6. Rick's Admin Panel (Filament 4)
+**CRITICAL: Upgrade to Filament 4** (had too many issues with v3)
+
+**Admin Features:**
+- **Batch QR Code Generator** for bag printing runs
+- **Daily Golden Question Management:**
+  - Add question text
+  - Add 4 multiple choice answers
+  - Mark correct answer
+  - Set active date/time for rotation
+  - Random time scheduling
+- **Winner Management:**
+  - View all winners
+  - Gift card distribution status
+  - Manual override if needed
+- **Google Maps Integration:**
+  - Heatmap of scan locations
+  - Pin markers for individual scans
+  - Filter by date range, question type (bag vs daily contest)
+  - Most active locations dashboard
+  - Identifies which sticker placements perform best
+- **Analytics Dashboard** (for sponsor pitches):
+  - Total scans
+  - Active locations
+  - Daily/weekly/monthly user engagement
+  - Win rates, participation rates
+  - Geographic distribution
+- **User Management & Cooldown Monitoring**
+- **Advertisement Management** (existing system)
+
+#### 7. Real-Time Contest Mechanics
+- Laravel Echo + Pusher for instant winner detection
+- When first correct answer submitted:
+  - Validate answer
+  - Lock question immediately
+  - Broadcast winner to all active users
+  - Trigger gift card distribution
+  - Update user dashboard
+- No page refresh needed - Vue 3 reactivity handles UI updates
+
+---
+
+### Future Features (Noted, Not MVP)
+
+#### Geocaching Integration (Optional)
+- **Admin checkbox per location:** "Enable geocaching for this location?"
+- **Use cases:**
+  - Public dog parks = Yes (tap into geocaching community)
+  - Private communities = No (security/trespasser concerns for property managers)
+- Rick decides per sticker/location based on client needs
+- Could be Phase 3 - free marketing through geocaching.com traffic
+- International community exposure if Rick expands
+
+**Why It's Smart:**
+- Leverages existing geocaching audience (millions worldwide)
+- Zero marketing cost
+- Cross-pollination: geocachers → dog owners, dog owners → geocaching
+- Additional proof of engagement for sponsor pitches
+
+**Why It's Optional:**
+- Rick's core market = private property managers who won't want public traffic
+- Can't risk client relationships for geocaching exposure
+- Flexibility = Rick controls this per location
+
+---
+
+### Technical Stack Decision
+
+**DECISION: Inertia.js + Vue 3**
+
+**Backend:**
+- Laravel 12
+- Filament 4 (Rick's admin panel only)
+- MySQL (switch from SQLite for production scale)
+- Laravel Echo + Pusher (real-time)
+
+**Frontend:**
+- Inertia.js (monolith with modern UX)
+- Vue 3 Composition API
+- Tailwind CSS
+- Vite for bundling
+
+**Why This Stack:**
+
+**For Shane's animations:**
+- Full Vue 3 Composition API for complex sequences
+- GSAP, Three.js integration works perfectly
+- Component-based = clean, reusable puppy/plane/cloud animations
+- Glassmorphism effects need full control over rendering
+
+**For Rick's business:**
+- Single deployment, one codebase to maintain
+- Filament 4 admin sits alongside seamlessly
+- Professional, scalable architecture for sponsor pitches
+- Can extract API later if Rick needs mobile app
+
+**For contest mechanics:**
+- Laravel Echo + Vue 3 reactivity = instant winner detection
+- Real-time lockout when first correct answer hits
+- Clean separation: Laravel handles logic, Vue handles UX
+
+**For future growth:**
+- Component library = easy to white-label for sponsors
+- SSR possible if SEO becomes priority
+- API extraction possible without full rewrite
+
+---
+
+### Database Schema (To Be Designed)
+
+**Required Tables:**
+- `users` - Authentication, winnings tracking
+- `daily_questions` - Golden questions with multiple choice answers
+- `submissions` - User answers with IP, geolocation, timestamp
+- `winners` - Winner records with gift card details
+- `gift_cards` - Redemption codes, status, provider data
+- `qr_scans` - Geolocation tracking for heatmap
+- `trivia_codes` - Existing bag code system
+- `answers` - Existing bag answers
+- `ad_boxes` - Existing advertisement system
+
+---
+
+### Development Checklist
+
+**Phase 2 Tasks:**
+1. ✅ Research gift card API providers with customer support integration
+2. ⏳ Design database schema for contest system
+3. ⏳ Upgrade to Laravel 12 + Filament 4
+4. ⏳ Build Rick's admin panel (QR generator, winner management, Google Maps analytics)
+5. ⏳ Build custom user authentication system with winnings dashboard
+6. ⏳ Build daily Golden Question system with multiple choice + random rotation
+7. ⏳ Add geolocation tracking for QR code scans
+8. ⏳ Implement anti-cheating measures (IP + user + cooldown)
+9. ⏳ Implement first-correct-answer validation + gift card auto-distribution
+10. ⏳ Integrate Google Maps with heatmap/pins for scan analytics
+11. ⏳ Design customer pages with green placeholder background
+12. ⏳ Integrate Laravel Echo + Pusher for real-time winner detection
+13. ⏳ Build Vue 3 components for animated UI
+14. ⏳ Test entire flow end-to-end before Rick sees it
+
+---
+
+### Deployment Strategy
+
+**Local Development:**
+- http://upwork-trivia.test
+- Herd handles routing
+
+**Production:**
+- https://trivia.sbarron.com
+- MySQL database (not SQLite)
+- Proper session/cache configuration
+- SSL certificates
+- Real-time websocket configuration
+
+---
+
+### Success Criteria
+
+**For Rick:**
+- Zero customer service burden (gift card provider handles support)
+- Professional admin panel for sales meetings with property managers
+- Analytics prove ROI for sponsor pitches
+- Batch QR generation streamlines production workflow
+- System scales from one property to hundreds
+
+**For Shane:**
+- Exceed expectations with animated puppy surprise
+- Build foundation for Rick's sponsorship vision
+- Maintain relationship with $100k+ client
+- Protect local reputation
+- Create referral-generating partnership
+
+**For Users:**
+- Fun, engaging experience (cartoon puppy, animations)
+- Fair contest (anti-cheating works)
+- Easy gift card redemption
+- Mobile-optimized (they're scanning QR codes)
+
+---
+
+### Critical Reminders
+
+**From Vision Operational Log (Oct 5-7, 2025):**
+1. **Production errors:** Check configuration FIRST, always
+2. **Truth is absolute:** Never claim completion without verification
+3. **Research before failure:** Exhaustive investigation before declaring impossible
+4. **Shane is always right:** Especially about UI/UX - defer to his judgment
+5. **Test after adding:** Verify tools work immediately after configuration
+
+**For This Project Specifically:**
+- Rick is $100k+ client - zero tolerance for failures
+- Test everything before claiming complete
+- Build for Rick's sponsor pitch meetings, not just functionality
+- The puppy surprise is strategic - makes Shane memorable
+- Local reputation means word spreads in business community
+
+---
+
+**PHASE 1 REFERENCE (Original Demo) - ARCHIVED**
+
+<details>
+<summary>Click to expand original Phase 1 documentation</summary>
+
+### Demo Credentials
 
 **Admin Panel:**
 - URL: http://upwork-trivia.test/admin
@@ -15,7 +440,7 @@
 - URL: http://upwork-trivia.test
 - Test Code: 1234
 
-## Features Implemented
+### Features Implemented
 
 ✅ **Public Facing Page**
 - 4-digit code input
@@ -46,7 +471,7 @@
 - ad_boxes: Title, URL, HTML content, click tracking
 - code_views: Analytics tracking
 
-## Quick Commands
+### Quick Commands
 
 ```bash
 # View site locally
@@ -62,18 +487,14 @@ php artisan db:seed --class=DemoDataSeeder
 php artisan cache:clear && php artisan config:clear
 ```
 
-## Database
-
-Using SQLite for simplicity. Database file: `database/database.sqlite`
-
-## Models
+### Models
 
 - **TriviaCode** - Main trivia code entity
 - **Answer** - Individual answers (many per code)
 - **AdBox** - Advertisement boxes
 - **CodeView** - Analytics tracking
 
-## PWA Features
+### PWA Features
 
 ✅ **Progressive Web App**
 - Installable on iOS, Android, Desktop
@@ -84,15 +505,82 @@ Using SQLite for simplicity. Database file: `database/database.sqlite`
 - Standalone app mode
 - Theme color integration
 
-## Built In
+### Production Deployment
 
-**Time:** ~4 hours (including PWA setup)
-**Delivery:** Same night as requirements received
-**Approach:** Build first, demo before discussion
+**Live Site:** https://trivia.sbarron.com
 
-## Next Steps for Client
+#### Deployment Process
 
-1. Review working demo
-2. Provide design assets (if any)
-3. Specify additional features needed
-4. Deploy to production domain
+```bash
+# Initial deployment
+cd /var/www
+git clone https://github.com/mrshanebarron/upwork-trivia.git trivia.sbarron.com
+cd trivia.sbarron.com
+
+# Install dependencies
+composer install --no-dev --optimize-autoloader
+npm ci && npm run build
+
+# Setup environment
+cp .env.example .env
+php artisan key:generate
+
+# Configure .env for production
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://trivia.sbarron.com
+DB_CONNECTION=sqlite
+SESSION_DRIVER=file
+CACHE_STORE=file  # CRITICAL: Must be file, not database
+FLARE_KEY=LqNisDDG2jWxt6BsHnmnjFf1Pe4WBk1s
+
+# Setup database
+touch database/database.sqlite
+php artisan migrate --force
+php artisan db:seed --class=DemoDataSeeder --force
+
+# CRITICAL: Fix permissions (SQLite requires write access)
+chown -R deploy:www-data .
+chmod -R 755 .
+chmod -R 775 storage bootstrap/cache database
+chmod 664 database/database.sqlite
+
+# Cache configurations
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Setup nginx and SSL
+# (nginx config created automatically)
+certbot --nginx -d trivia.sbarron.com
+```
+
+#### CRITICAL Permission Issues Solved
+
+**Problem:** SQLite readonly database errors on production
+**Root Cause:** Insufficient permissions on database file and parent directory
+**Solution:**
+```bash
+# Database directory needs write permission
+chmod 775 database
+chmod 664 database/database.sqlite
+chown deploy:www-data database database/database.sqlite
+
+# Storage directories need write permission
+chmod -R 775 storage/framework/cache
+chmod -R 775 storage/framework/sessions
+chmod -R 775 storage/logs
+chown -R deploy:www-data storage
+
+# Bootstrap cache needs write permission
+chmod -R 775 bootstrap/cache
+chown -R deploy:www-data bootstrap/cache
+```
+
+**Why This Matters:**
+- SQLite needs write access to the database file AND parent directory
+- Cache driver must be `file` not `database` to avoid SQLite write conflicts
+- Web server (www-data) needs group write permissions
+- Deploy user owns files, www-data has group access
+
+</details>

@@ -17,8 +17,20 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->date('birthdate'); // Age verification - must be 18+
+            $table->boolean('is_admin')->default(false);
+            $table->boolean('show_name_publicly')->default(false); // Privacy control
+            $table->decimal('total_winnings', 10, 2)->default(0);
+            $table->timestamp('last_won_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
+
+            // Indexes
+            $table->index('email');
+            $table->index('last_won_at');
+
+            // Note: Age verification check (18+) will be handled in application logic
+            // MySQL CHECK constraints are not fully supported in Laravel migrations
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

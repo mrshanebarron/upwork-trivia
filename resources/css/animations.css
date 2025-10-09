@@ -1,0 +1,29 @@
+/* Additional animation styles for the contest page */
+
+.animated-contest-page {
+    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Ensure glassmorphism cards are above background but below navigation */
+.animated-contest-page .glassmorphism-card {
+    position: relative;
+    z-index: 10;
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Accessibility: Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golden Question System - Technical Progress Review</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .content {
+            flex: 1;
+            padding: 40px;
+            max-width: 900px;
+            background: white;
+            overflow-y: auto;
+        }
+
+        .sidebar {
+            width: 400px;
+            background: #f9fafb;
+            border-left: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .comment-section {
+            padding: 30px;
+            position: sticky;
+            top: 0;
+        }
+
+        h1 {
+            color: #1e293b;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            border-bottom: 4px solid #3b82f6;
+            padding-bottom: 15px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #10b981;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 40px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%);
+            width: 91.9%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        h2 {
+            color: #1e40af;
+            font-size: 1.8em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-left: 5px solid #3b82f6;
+            padding-left: 15px;
+        }
+
+        h3 {
+            color: #334155;
+            font-size: 1.3em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .feature-card h4 {
+            color: #1e40af;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .feature-card p {
+            color: #64748b;
+            font-size: 0.95em;
+        }
+
+        .stats-box {
+            background: #eff6ff;
+            border-left: 5px solid #3b82f6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .stats-box strong {
+            color: #1e40af;
+            font-size: 2em;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #dc2626;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .tech-badge {
+            background: #1e293b;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        /* Comment Section Styles */
+        .comment-header {
+            margin-bottom: 25px;
+        }
+
+        .comment-header h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.5em;
+            border: none;
+            padding: 0;
+            color: #1e293b;
+        }
+
+        .comment-header p {
+            color: #64748b;
+            font-size: 0.9em;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95em;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .comment-form input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95em;
+            margin-bottom: 15px;
+        }
+
+        .comment-form input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: #2563eb;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .alert.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .alert.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .comment-section {
+                position: relative;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1>Golden Question System</h1>
+            <div class="status-badge">Phase 2 Development Complete - Ready for Review</div>
+
+            <div class="stats-box">
+                <strong>✅ All Core Features Built</strong>
+                Complete system with QR scanning, contest logic, gift card integration, and analytics
+            </div>
+
+            <h2>🎯 System Overview</h2>
+            <p>The Golden Question contest system is a Laravel 12 + Vue 3 application that enables users to scan QR codes at dog stations and participate in daily trivia contests. The system includes geolocation tracking, automated winner detection, and complete analytics infrastructure.</p>
+
+            <h2>📊 Technical Stack</h2>
+            <div class="tech-stack">
+                <span class="tech-badge">Laravel 12</span>
+                <span class="tech-badge">Vue 3 (Composition API)</span>
+                <span class="tech-badge">Inertia.js</span>
+                <span class="tech-badge">Filament 4 (Admin)</span>
+                <span class="tech-badge">Tailwind CSS</span>
+                <span class="tech-badge">Vite</span>
+                <span class="tech-badge">SQLite (Dev)</span>
+                <span class="tech-badge">MySQL (Production)</span>
+                <span class="tech-badge">Laravel Echo + Pusher</span>
+                <span class="tech-badge">PHPUnit 12.3</span>
+            </div>
+
+            <h2>✅ Completed Features</h2>
+
+            <h3>Database Architecture (8 Tables)</h3>
+            <ul>
+                <li><strong>users</strong> - Authentication with birthdate verification (age 18+)</li>
+                <li><strong>daily_questions</strong> - Multiple choice questions (A/B/C/D format)</li>
+                <li><strong>stickers</strong> - QR code stickers with location data</li>
+                <li><strong>submissions</strong> - User answers with IP, device fingerprint, geolocation</li>
+                <li><strong>winners</strong> - Winner records linked to questions and submissions</li>
+                <li><strong>gift_cards</strong> - Integration with Tremendous API</li>
+                <li><strong>sticker_scans</strong> - Analytics tracking for QR scans</li>
+                <li><strong>gift_card_delivery_logs</strong> - Audit trail for deliveries</li>
+            </ul>
+
+            <h3>Models & Business Logic</h3>
+            <ul>
+                <li><code>DailyQuestion</code> - Active question detection, winner relationship, answer accessors</li>
+                <li><code>User</code> - Age verification (18+), 30-day cooldown logic, winnings tracking</li>
+                <li><code>Submission</code> - Winner detection algorithm with timestamp + random tiebreaker</li>
+                <li><code>Winner</code> - Prize amount tracking, gift card relationship</li>
+                <li><code>GiftCard</code> - Status tracking (pending, delivered, failed), redemption links</li>
+                <li><code>Sticker</code> - Location coordinates, scan counting, unique code generation</li>
+                <li><code>StickerScan</code> - IP address, geolocation, user agent logging</li>
+            </ul>
+
+            <h3>Services & APIs</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>GiftCardService</h4>
+                    <p>Tremendous API integration with mock mode for testing, retry logic, delivery tracking</p>
+                </div>
+                <div class="feature-card">
+                    <h4>CacheService</h4>
+                    <p>Active question caching, leaderboard caching, cache warming for performance</p>
+                </div>
+                <div class="feature-card">
+                    <h4>ContestService</h4>
+                    <p>Winner detection logic, first-correct-answer validation, gift card automation</p>
+                </div>
+            </div>
+
+            <h3>Controllers & Routes</h3>
+            <ul>
+                <li><strong>ContestController</strong> - Show question, submit answer, display winner, show results</li>
+                <li><strong>DashboardController</strong> - User stats, winnings history, gift cards, submissions</li>
+                <li><strong>ScanController</strong> - QR code scanning with geolocation logging</li>
+                <li><strong>ProfileController</strong> - User profile management (Laravel Breeze)</li>
+            </ul>
+
+            <h3>Middleware & Security</h3>
+            <ul>
+                <li><code>CheckContestActive</code> - Ensures contest is running before submissions</li>
+                <li><code>EnsureUserIsOfAge</code> - Validates birthdate (18+ requirement)</li>
+                <li>IP address tracking per submission (prevents spam)</li>
+                <li>Device fingerprinting</li>
+                <li>30-day win cooldown per user</li>
+            </ul>
+
+            <h3>Queue Jobs & Automation</h3>
+            <ul>
+                <li><strong>DeliverGiftCardJob</strong> - Exponential backoff retry: 5 min, 10 min, 20 min, 40 min, 80 min</li>
+                <li><strong>SendWinnerNotificationJob</strong> - Email notifications with gift card links</li>
+                <li>Queue failure handling with permanent failure logging</li>
+            </ul>
+
+            <h3>Vue Components (Frontend)</h3>
+            <ul>
+                <li><strong>Contest/GoldenQuestion.vue</strong> - Multiple choice answer selection</li>
+                <li><strong>Contest/Winner.vue</strong> - Winner celebration screen</li>
+                <li><strong>Contest/Results.vue</strong> - Question results display</li>
+                <li><strong>Dashboard.vue</strong> - User statistics and quick links</li>
+                <li><strong>Dashboard/Winnings.vue</strong> - Paginated winnings history</li>
+                <li><strong>Dashboard/GiftCards.vue</strong> - Gift card management with redemption links</li>
+                <li><strong>Dashboard/Submissions.vue</strong> - Answer history (correct/incorrect)</li>
+                <li><strong>Scan/Show.vue</strong> - Sticker details and scan analytics</li>
+                <li><strong>Legal/Terms.vue</strong> & <strong>Legal/Privacy.vue</strong></li>
+            </ul>
+
+            <h2>🔧 Technical Workflows</h2>
+
+            <h3>QR Code Scan Flow</h3>
+            <ol>
+                <li>User scans QR code on sticker at dog station</li>
+                <li>System logs: IP address, geolocation (lat/long), user agent, timestamp</li>
+                <li>Redirects to contest page with active question</li>
+                <li>Sticker scan count incremented for analytics</li>
+            </ol>
+
+            <h3>Contest Submission Flow</h3>
+            <ol>
+                <li>User selects answer (A, B, C, or D)</li>
+                <li>System validates:
+                    <ul>
+                        <li>Contest is active</li>
+                        <li>User is authenticated and age 18+</li>
+                        <li>User hasn't submitted today for this question</li>
+                        <li>IP hasn't submitted today for this question</li>
+                        <li>User hasn't won in last 30 days</li>
+                    </ul>
+                </li>
+                <li>Submission saved with timestamp and random tiebreaker (1-1,000,000)</li>
+                <li>If answer is correct:
+                    <ul>
+                        <li>Check if this is first correct answer (timestamp + tiebreaker)</li>
+                        <li>If yes: Create Winner record, dispatch gift card delivery job</li>
+                        <li>Lock question (no more winners)</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h3>Gift Card Delivery Flow</h3>
+            <ol>
+                <li>Winner record created in database</li>
+                <li><code>DeliverGiftCardJob</code> dispatched to queue</li>
+                <li>Job calls <code>GiftCardService->deliverGiftCard()</code></li>
+                <li>Service makes Tremendous API call (or mock in dev)</li>
+                <li>On success:
+                    <ul>
+                        <li>GiftCard record updated with redemption link</li>
+                        <li>Status set to "delivered"</li>
+                        <li>Winner notification email dispatched</li>
+                    </ul>
+                </li>
+                <li>On failure:
+                    <ul>
+                        <li>Job retries with exponential backoff</li>
+                        <li>After 5 attempts: marked as permanent failure</li>
+                        <li>Delivery log created for audit trail</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h3>Winner Notification Flow</h3>
+            <ol>
+                <li>Email sent via Laravel's notification system</li>
+                <li>Contains:
+                    <ul>
+                        <li>Congratulations message</li>
+                        <li>Question text that was answered correctly</li>
+                        <li>Gift card redemption link (if delivered)</li>
+                        <li>Support contact information</li>
+                    </ul>
+                </li>
+                <li>Also stored in database notifications table</li>
+            </ol>
+
+            <h2>📈 Analytics & Tracking</h2>
+            <ul>
+                <li>Every QR scan logged with geolocation for heatmap generation</li>
+                <li>Sticker scan counts for performance analysis</li>
+                <li>Submission tracking (correct vs incorrect answers)</li>
+                <li>User winnings history</li>
+                <li>Gift card delivery success/failure rates</li>
+                <li>IP address tracking for anti-cheat analysis</li>
+            </ul>
+
+            <h2>🚀 Deployment Configuration</h2>
+
+            <h3>Environment Variables Required</h3>
+            <ul>
+                <li><code>APP_URL</code> - https://trivia.sbarron.com</li>
+                <li><code>TREMENDOUS_API_KEY</code> - Gift card API key</li>
+                <li><code>TREMENDOUS_MODE</code> - "live" or "mock"</li>
+                <li><code>GOOGLE_MAPS_API_KEY</code> - For location services</li>
+                <li><code>PUSHER_*</code> - Real-time notifications (optional)</li>
+                <li><code>MAIL_*</code> - Email configuration for notifications</li>
+            </ul>
+
+            <h3>Server Requirements</h3>
+            <ul>
+                <li>PHP 8.2+ with extensions: BCMath, Ctype, JSON, Mbstring, OpenSSL, PDO, Tokenizer, XML</li>
+                <li>MySQL 8.0+ or SQLite 3.8+</li>
+                <li>Nginx or Apache with mod_rewrite</li>
+                <li>Node.js 20+ for frontend builds</li>
+                <li>Composer 2.5+</li>
+                <li>Redis (optional, for queue/cache)</li>
+            </ul>
+
+            <h2>⚙️ Admin Panel Features (Filament 4)</h2>
+            <ul>
+                <li>Daily question management (CRUD operations)</li>
+                <li>Sticker generation and tracking</li>
+                <li>Winner management and manual overrides</li>
+                <li>Gift card status monitoring</li>
+                <li>User management</li>
+                <li>Analytics dashboard</li>
+                <li>Settings management (contest active/inactive)</li>
+            </ul>
+
+            <h2>🔄 Next Steps for Deployment</h2>
+            <ol>
+                <li>Configure Tremendous API with production credentials</li>
+                <li>Set up email service (Mailgun, SES, or SMTP)</li>
+                <li>Configure Google Maps API key</li>
+                <li>Deploy to production server</li>
+                <li>Run database migrations on production</li>
+                <li>Create admin user account</li>
+                <li>Load first daily questions</li>
+                <li>Print and place stickers at test location</li>
+                <li>User acceptance testing</li>
+            </ol>
+
+            <p style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #e5e7eb; color: #64748b; font-size: 0.9em;">
+                <strong>Generated:</strong> October 9, 2025 | <strong>Version:</strong> Phase 2 Development Build
+            </p>
+        </div>
+
+        <div class="sidebar">
+            <div class="comment-section">
+                <div class="comment-header">
+                    <h2>💬 Comments</h2>
+                    <p>Leave your feedback or questions about this progress report.</p>
+                </div>
+
+                <div id="alert" class="alert"></div>
+
+                <form class="comment-form" id="commentForm">
+                    <input
+                        type="text"
+                        id="nameInput"
+                        placeholder="Your Name"
+                        required
+                    />
+
+                    <textarea
+                        id="commentInput"
+                        placeholder="Your comments, questions, or feedback...
+
+Examples:
+• Great progress! Question about the 30-day cooldown...
+• When can we test the QR scanning?
+• Need clarification on the gift card delivery...
+• Looks good, let's schedule a demo"
+                        required
+                    ></textarea>
+
+                    <button type="submit" class="submit-btn">Submit Comment</button>
+                </form>
+
+                <div id="commentsList" style="margin-top: 30px;">
+                    <!-- Comments will appear here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // File-based comment system
+        document.getElementById('commentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('nameInput').value;
+            const comment = document.getElementById('commentInput').value;
+            const submitBtn = e.target.querySelector('.submit-btn');
+            const alert = document.getElementById('alert');
+
+            // Disable button during submission
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Saving...';
+
+            try {
+                const response = await fetch('comments-api.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        comment: comment
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Show success message
+                    alert.textContent = 'Comment saved! Both you and Shane can see this now.';
+                    alert.className = 'alert success';
+                    alert.style.display = 'block';
+
+                    // Clear form
+                    document.getElementById('nameInput').value = '';
+                    document.getElementById('commentInput').value = '';
+
+                    // Reload comments
+                    await loadComments();
+                } else {
+                    throw new Error(result.error || 'Failed to save comment');
+                }
+            } catch (error) {
+                alert.textContent = 'Error saving comment: ' + error.message;
+                alert.className = 'alert error';
+                alert.style.display = 'block';
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Comment';
+
+                // Hide alert after 5 seconds
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                }, 5000);
+            }
+        });
+
+        async function loadComments() {
+            const commentsList = document.getElementById('commentsList');
+
+            try {
+                const response = await fetch('comments-api.php');
+                const result = await response.json();
+
+                if (!result.success) {
+                    throw new Error('Failed to load comments');
+                }
+
+                const comments = result.comments || [];
+
+                if (comments.length === 0) {
+                    commentsList.innerHTML = '<p style="color: #64748b; font-size: 0.9em;">No comments yet. Be the first to leave feedback!</p>';
+                    return;
+                }
+
+                commentsList.innerHTML = '<h3 style="color: #1e293b; font-size: 1.1em; margin-bottom: 15px;">All Comments (' + comments.length + ')</h3>';
+
+                // Show newest first
+                comments.reverse().forEach(c => {
+                    const div = document.createElement('div');
+                    div.style.cssText = 'background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #e5e7eb;';
+                    div.innerHTML = `
+                        <div style="font-weight: 600; color: #1e293b; margin-bottom: 5px;">${escapeHtml(c.name)}</div>
+                        <div style="font-size: 0.85em; color: #64748b; margin-bottom: 10px;">${escapeHtml(c.timestamp)}</div>
+                        <div style="color: #334155; white-space: pre-wrap;">${escapeHtml(c.comment)}</div>
+                    `;
+                    commentsList.appendChild(div);
+                });
+            } catch (error) {
+                commentsList.innerHTML = '<p style="color: #dc2626; font-size: 0.9em;">Error loading comments: ' + error.message + '</p>';
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Load comments on page load
+        loadComments();
+
+        // Auto-refresh comments every 30 seconds
+        setInterval(loadComments, 30000);
+    </script>
+</body>
+</html>

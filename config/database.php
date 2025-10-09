@@ -37,10 +37,11 @@ return [
             'database' => env('DB_DATABASE', database_path('database.sqlite')),
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
-            'busy_timeout' => null,
-            'journal_mode' => null,
-            'synchronous' => null,
-            'transaction_mode' => 'DEFERRED',
+            // Performance optimizations
+            'busy_timeout' => 5000, // 5 seconds
+            'journal_mode' => 'WAL', // Write-Ahead Logging for better concurrency
+            'synchronous' => 'NORMAL', // Balance between safety and speed
+            'transaction_mode' => 'IMMEDIATE', // Better for write-heavy operations
         ],
 
         'mysql' => [
@@ -57,10 +58,17 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
             'strict' => true,
-            'engine' => null,
+            'engine' => 'InnoDB',
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                // Performance optimizations
+                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::ATTR_STRINGIFY_FETCHES => false,
+                PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
             ]) : [],
+            // Connection pooling
+            'sticky' => env('DB_STICKY', true),
+            'read_write_timeout' => env('DB_READ_WRITE_TIMEOUT', 60),
         ],
 
         'mariadb' => [

@@ -35,4 +35,19 @@ return [
         ],
     ],
 
+    'tremendous' => [
+        'api_url' => env('TREMENDOUS_API_URL', 'https://api.tremendous.com/api/v2'),
+        'api_key' => env('TREMENDOUS_API_KEY'),
+        'funding_source_id' => env('TREMENDOUS_FUNDING_SOURCE_ID'),
+    ],
+
+    'google_maps' => [
+        'api_key' => env('GOOGLE_MAPS_API_KEY'),
+    ],
+
+    'recaptcha' => [
+        'site_key' => env('RECAPTCHA_SITE_KEY'),
+        'secret_key' => env('RECAPTCHA_SECRET_KEY'),
+    ],
+
 ];
