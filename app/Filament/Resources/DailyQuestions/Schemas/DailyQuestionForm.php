@@ -39,7 +39,7 @@ class DailyQuestionForm
                 Section::make('Multiple Choice Options')
                     ->description('Provide 4 answer options (A, B, C, D)')
                     ->schema([
-                        Grid::make(2)
+                        Grid::make(1)
                             ->schema([
                                 TextInput::make('option_a')
                                     ->label('Option A')
@@ -76,7 +76,7 @@ class DailyQuestionForm
                 Section::make('Contest Settings')
                     ->description('Prize and scheduling configuration')
                     ->schema([
-                        Grid::make(3)
+                        Grid::make(1)
                             ->schema([
                                 TextInput::make('prize_amount')
                                     ->label('Prize Amount ($)')
@@ -107,7 +107,7 @@ class DailyQuestionForm
                 Section::make('Results & Winner')
                     ->description('Contest results and winner information')
                     ->schema([
-                        Grid::make(3)
+                        Grid::make(1)
                             ->schema([
                                 TextInput::make('submission_count')
                                     ->label('Total Submissions')

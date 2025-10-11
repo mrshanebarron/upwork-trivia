@@ -19,7 +19,7 @@ class StickerForm
                 Section::make('Sticker Information')
                     ->description('Unique identifier and status')
                     ->schema([
-                        Grid::make(3)
+                        Grid::make(1)
                             ->schema([
                                 TextInput::make('unique_code')
                                     ->label('Sticker Code')
@@ -61,7 +61,7 @@ class StickerForm
                 Section::make('Location Details')
                     ->description('Property and geographic information')
                     ->schema([
-                        Grid::make(2)
+                        Grid::make(1)
                             ->schema([
                                 TextInput::make('location_name')
                                     ->label('Location Name')
@@ -74,7 +74,7 @@ class StickerForm
                                     ->helperText('Building or complex name'),
                             ]),
 
-                        Grid::make(3)
+                        Grid::make(1)
                             ->schema([
                                 TextInput::make('property_manager_id')
                                     ->label('Property Manager ID')

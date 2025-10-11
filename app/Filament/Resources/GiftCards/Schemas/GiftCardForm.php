@@ -19,7 +19,7 @@ class GiftCardForm
                 Section::make('Recipient Information')
                     ->description('User and winner details for this gift card')
                     ->schema([
-                        Grid::make(2)
+                        Grid::make(1)
                             ->schema([
                                 Select::make('user_id')
                                     ->label('User')
@@ -44,7 +44,7 @@ class GiftCardForm
                 Section::make('Gift Card Details')
                     ->description('Provider and reward information')
                     ->schema([
-                        Grid::make(3)
+                        Grid::make(1)
                             ->schema([
                                 Select::make('provider')
                                     ->label('Provider')
@@ -70,7 +70,7 @@ class GiftCardForm
                                     ->helperText('Provider reward identifier'),
                             ]),
 
-                        Grid::make(3)
+                        Grid::make(1)
                             ->schema([
                                 TextInput::make('amount')
                                     ->label('Amount')
@@ -115,7 +115,7 @@ class GiftCardForm
                 Section::make('Status & Tracking')
                     ->description('Delivery status and timestamps')
                     ->schema([
-                        Grid::make(3)
+                        Grid::make(1)
                             ->schema([
                                 Select::make('status')
                                     ->label('Status')

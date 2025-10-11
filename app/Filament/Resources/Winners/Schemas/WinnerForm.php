@@ -17,7 +17,7 @@ class WinnerForm
                 Section::make('Winner Information')
                     ->description('Contest winner details and prize information')
                     ->schema([
-                        Grid::make(2)
+                        Grid::make(1)
                             ->schema([
                                 Select::make('user_id')
                                     ->label('Winner')
@@ -36,7 +36,7 @@ class WinnerForm
                                     ->helperText('Dollar amount awarded'),
                             ]),
 
-                        Grid::make(2)
+                        Grid::make(1)
                             ->schema([
                                 Select::make('daily_question_id')
                                     ->label('Question')

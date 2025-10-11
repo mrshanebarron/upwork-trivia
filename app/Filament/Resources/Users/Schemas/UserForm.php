@@ -19,7 +19,7 @@ class UserForm
                 Section::make('Account Information')
                     ->description('Basic user account details')
                     ->schema([
-                        Grid::make(2)
+                        Grid::make(1)
                             ->schema([
                                 TextInput::make('name')
                                     ->label('Full Name')
@@ -36,7 +36,7 @@ class UserForm
                                     ->helperText('Must be unique'),
                             ]),
 
-                        Grid::make(2)
+                        Grid::make(1)
                             ->schema([
                                 DatePicker::make('birthdate')
                                     ->label('Date of Birth')
@@ -75,7 +75,7 @@ class UserForm
                 Section::make('Permissions & Settings')
                     ->description('User role and privacy settings')
                     ->schema([
-                        Grid::make(2)
+                        Grid::make(1)
                             ->schema([
                                 Toggle::make('is_admin')
                                     ->label('Administrator')
@@ -94,7 +94,7 @@ class UserForm
                 Section::make('Contest Statistics')
                     ->description('Read-only contest participation data')
                     ->schema([
-                        Grid::make(2)
+                        Grid::make(1)
                             ->schema([
                                 TextInput::make('total_winnings')
                                     ->label('Total Winnings ($)')

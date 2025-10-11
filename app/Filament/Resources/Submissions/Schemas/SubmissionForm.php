@@ -19,7 +19,7 @@ class SubmissionForm
                 Section::make('Submission Details')
                     ->description('Question and answer information')
                     ->schema([
-                        Grid::make(3)
+                        Grid::make(1)
                             ->schema([
                                 Select::make('daily_question_id')
                                     ->label('Question')
@@ -45,7 +45,7 @@ class SubmissionForm
                                     ->helperText('Where they scanned'),
                             ]),
 
-                        Grid::make(3)
+                        Grid::make(1)
                             ->schema([
                                 Select::make('selected_answer')
                                     ->label('Answer Selected')
@@ -82,7 +82,7 @@ class SubmissionForm
                 Section::make('Anti-Cheat Data')
                     ->description('Read-only tracking information')
                     ->schema([
-                        Grid::make(3)
+                        Grid::make(1)
                             ->schema([
                                 TextInput::make('ip_address')
                                     ->label('IP Address')
@@ -111,7 +111,7 @@ class SubmissionForm
                 Section::make('Geolocation')
                     ->description('GPS coordinates')
                     ->schema([
-                        Grid::make(2)
+                        Grid::make(1)
                             ->schema([
                                 TextInput::make('latitude')
                                     ->label('Latitude')
