@@ -145,14 +145,14 @@ const submitButtonText = computed(() => {
                 <!-- Two Column Grid Layout -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                     <!-- Left Column: Puppy -->
-                    <div class="flex justify-center items-center sticky top-32">
+                    <div class="hidden lg:flex justify-center items-center sticky top-32 h-screen">
                         <div class="h-[60vh] w-auto max-w-full">
                             <PuppyAnimation />
                         </div>
                     </div>
 
                     <!-- Right Column: Content -->
-                    <div class="space-y-6">
+                    <div class="space-y-6 lg:col-start-2">
                         <!-- Golden Question Teaser -->
                         <div v-if="question && !question.has_winner">
                             <Link :href="route('home')">
