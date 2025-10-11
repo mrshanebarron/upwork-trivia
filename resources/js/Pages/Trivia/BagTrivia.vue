@@ -21,6 +21,8 @@ const props = defineProps({
 
 const page = usePage();
 const selectedAnswer = ref(null);
+const selectedBagAnswer = ref(null);
+const submittingBag = ref(false);
 const submitting = ref(false);
 const { execute: executeRecaptcha } = useRecaptcha();
 
@@ -93,6 +95,35 @@ const canSubmit = computed(() => {
 const submitButtonText = computed(() => {
     if (submitting.value) return 'Submitting...';
     return 'Submit Answer';
+});
+
+const submitBagAnswer = async () => {
+    if (!selectedBagAnswer.value || submittingBag.value) return;
+
+    submittingBag.value = true;
+
+    try {
+        // For now, just show which answer was selected
+        // TODO: Add backend endpoint to record bag trivia submissions
+        flashMessage.value = `You selected: ${selectedBagAnswer.value}`;
+        flashType.value = 'success';
+
+        // Auto-dismiss after 3 seconds
+        setTimeout(() => {
+            flashMessage.value = null;
+            flashType.value = null;
+        }, 3000);
+    } catch (error) {
+        console.error('Submission error:', error);
+        flashMessage.value = 'Error submitting answer';
+        flashType.value = 'error';
+    } finally {
+        submittingBag.value = false;
+    }
+};
+
+const canSubmitBag = computed(() => {
+    return selectedBagAnswer.value !== null;
 });
 
 onMounted(() => {
@@ -247,20 +278,60 @@ onMounted(() => {
                                 <p class="text-xl font-semibold text-gray-900 text-center">{{ trivia_code.description }}</p>
                             </div>
 
+                            <!-- Flash Message -->
+                            <div v-if="flashMessage" class="mb-6 p-4 rounded-xl border-2" :class="{
+                                'bg-green-100 border-green-500 text-green-900': flashType === 'success',
+                                'bg-red-100 border-red-500 text-red-900': flashType === 'error',
+                                'bg-blue-100 border-blue-500 text-blue-900': flashType === 'info'
+                            }">
+                                <div class="flex justify-between items-center">
+                                    <p class="font-semibold">{{ flashMessage }}</p>
+                                    <button @click="dismissFlash" class="text-2xl font-bold hover:opacity-70">&times;</button>
+                                </div>
+                            </div>
+
                             <!-- Answers -->
                             <div v-if="trivia_code.answers && trivia_code.answers.length > 0" class="space-y-4">
-                                <div v-for="(answer, index) in trivia_code.answers" :key="answer.id"
-                                     class="p-4 bg-white/60 backdrop-blur-sm rounded-xl border-2 border-white/70">
+                                <button
+                                    v-for="(answer, index) in trivia_code.answers"
+                                    :key="answer.id"
+                                    @click="selectedBagAnswer = answer.text"
+                                    class="w-full p-4 bg-white/60 backdrop-blur-sm rounded-xl border-2 transition-all duration-200 cursor-pointer hover:shadow-lg"
+                                    :class="{
+                                        'border-yellow-500 bg-yellow-100 shadow-lg': selectedBagAnswer === answer.text,
+                                        'border-white/70 hover:border-yellow-300': selectedBagAnswer !== answer.text
+                                    }">
                                     <div class="flex items-start">
-                                        <div class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold mr-3">
+                                        <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3 transition-colors"
+                                             :class="{
+                                                 'bg-yellow-500 text-white': selectedBagAnswer === answer.text,
+                                                 'bg-blue-500 text-white': selectedBagAnswer !== answer.text
+                                             }">
                                             {{ index + 1 }}
                                         </div>
-                                        <p class="text-lg text-gray-900 flex-1">{{ answer.text }}</p>
+                                        <p class="text-lg font-medium flex-1 text-left" :class="{
+                                            'text-yellow-900': selectedBagAnswer === answer.text,
+                                            'text-gray-900': selectedBagAnswer !== answer.text
+                                        }">{{ answer.text }}</p>
                                     </div>
-                                </div>
+                                </button>
                             </div>
                             <div v-else class="text-center p-6 bg-white/40 backdrop-blur-sm rounded-xl">
                                 <p class="text-gray-600">No answers available for this trivia code.</p>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div v-if="trivia_code.answers && trivia_code.answers.length > 0" class="mt-6">
+                                <button
+                                    @click="submitBagAnswer"
+                                    :disabled="!canSubmitBag || submittingBag"
+                                    class="w-full py-4 px-6 rounded-xl font-bold text-lg transition-all duration-200"
+                                    :class="{
+                                        'bg-yellow-500 hover:bg-yellow-600 text-gray-900 shadow-lg hover:shadow-xl cursor-pointer': canSubmitBag && !submittingBag,
+                                        'bg-gray-400 text-gray-600 cursor-not-allowed': !canSubmitBag || submittingBag
+                                    }">
+                                    {{ submittingBag ? 'Submitting...' : 'Submit Answer' }}
+                                </button>
                             </div>
                         </CartoonCard>
 
