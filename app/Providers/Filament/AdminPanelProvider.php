@@ -48,6 +48,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('Poop Bag Trivia')
             ->colors([
                 'primary' => Color::Amber,
             ])
