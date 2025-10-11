@@ -18,7 +18,7 @@ class WinnerResource extends Resource
 {
     protected static ?string $model = Winner::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTrophy;
 
     public static function form(Schema $schema): Schema
     {
