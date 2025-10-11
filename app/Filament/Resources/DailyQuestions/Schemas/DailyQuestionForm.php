@@ -127,7 +127,7 @@ class DailyQuestionForm
 
                                 Select::make('winner_id')
                                     ->label('Winner')
-                                    ->relationship('winner', 'name')
+                                    ->relationship('winnerUser', 'name')
                                     ->searchable()
                                     ->preload()
                                     ->disabled()
