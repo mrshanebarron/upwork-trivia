@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScanController;
+use App\Http\Controllers\TriviaCodeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -21,6 +22,9 @@ use Inertia\Inertia;
 
 // Homepage - Shows Golden Question (Sticker QR destination)
 Route::get('/', [ContestController::class, 'show'])->name('home');
+
+// Bag Trivia - Shows Golden Question + Bag's trivia (Bag QR destination)
+Route::get('/trivia', [TriviaCodeController::class, 'show'])->name('trivia.show');
 
 // Public Pages
 Route::get('/about', [PageController::class, 'about'])->name('about');

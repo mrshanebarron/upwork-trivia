@@ -27,4 +27,12 @@ class TriviaCode extends Model
     {
         return $this->hasMany(CodeView::class);
     }
+
+    /**
+     * Generate QR code URL for bag trivia
+     */
+    public function getQrUrl(): string
+    {
+        return route('trivia.show', ['code' => $this->code]);
+    }
 }

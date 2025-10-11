@@ -23,8 +23,8 @@ class ScanController extends Controller
         // Log the scan for analytics
         $this->logScan($request, $sticker);
 
-        // Redirect to contest page with sticker code
-        return redirect()->route('contest.show', ['code' => $code]);
+        // Redirect to homepage (Golden Question) with sticker code
+        return redirect()->route('home', ['code' => $code]);
     }
 
     /**
