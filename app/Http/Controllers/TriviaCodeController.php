@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AdBox;
+use App\Models\BagSubmission;
 use App\Models\DailyQuestion;
 use App\Models\TriviaCode;
 use App\Services\ContestService;
@@ -71,6 +72,7 @@ class TriviaCodeController extends Controller
 
         return Inertia::render('Trivia/BagTrivia', [
             'trivia_code' => [
+                'id' => $triviaCode->id,
                 'code' => $triviaCode->code,
                 'title' => $triviaCode->title,
                 'description' => $triviaCode->description,
@@ -95,5 +97,27 @@ class TriviaCodeController extends Controller
             'already_submitted' => $alreadySubmitted,
             'ad_boxes' => $adBoxes,
         ]);
+    }
+
+    /**
+     * Submit bag trivia answer
+     */
+    public function submitBagAnswer(Request $request)
+    {
+        $validated = $request->validate([
+            'trivia_code_id' => 'required|exists:trivia_codes,id',
+            'answer' => 'required|string',
+        ]);
+
+        // Create submission
+        BagSubmission::create([
+            'trivia_code_id' => $validated['trivia_code_id'],
+            'user_id' => auth()->id(),
+            'answer' => $validated['answer'],
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
+        return back()->with('success', 'Answer submitted successfully!');
     }
 }

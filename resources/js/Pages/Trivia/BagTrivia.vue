@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watchEffect } from 'vue';
 import { Head, router, Link, usePage } from '@inertiajs/vue3';
 import SkyGrassBackground from '@/Components/Animations/SkyGrassBackground.vue';
 import CloudsAnimation from '@/Components/Animations/CloudsAnimation.vue';
@@ -30,19 +30,21 @@ const { execute: executeRecaptcha } = useRecaptcha();
 const flashMessage = ref(null);
 const flashType = ref(null);
 
-// Watch for flash messages from backend
-if (page.props.flash) {
-    if (page.props.flash.success) {
-        flashMessage.value = page.props.flash.success;
-        flashType.value = 'success';
-    } else if (page.props.flash.error) {
-        flashMessage.value = page.props.flash.error;
-        flashType.value = 'error';
-    } else if (page.props.flash.info) {
-        flashMessage.value = page.props.flash.info;
-        flashType.value = 'info';
+// Watch for flash messages from backend (reactive)
+watchEffect(() => {
+    if (page.props.flash) {
+        if (page.props.flash.success) {
+            flashMessage.value = page.props.flash.success;
+            flashType.value = 'success';
+        } else if (page.props.flash.error) {
+            flashMessage.value = page.props.flash.error;
+            flashType.value = 'error';
+        } else if (page.props.flash.info) {
+            flashMessage.value = page.props.flash.info;
+            flashType.value = 'info';
+        }
     }
-}
+});
 
 const dismissFlash = () => {
     flashMessage.value = null;
@@ -103,21 +105,16 @@ const submitBagAnswer = async () => {
     submittingBag.value = true;
 
     try {
-        // For now, just show which answer was selected
-        // TODO: Add backend endpoint to record bag trivia submissions
-        flashMessage.value = `You selected: ${selectedBagAnswer.value}`;
-        flashType.value = 'success';
-
-        // Auto-dismiss after 3 seconds
-        setTimeout(() => {
-            flashMessage.value = null;
-            flashType.value = null;
-        }, 3000);
+        router.post(route('trivia.submit'), {
+            trivia_code_id: props.trivia_code.id,
+            answer: selectedBagAnswer.value,
+        }, {
+            onFinish: () => {
+                submittingBag.value = false;
+            }
+        });
     } catch (error) {
         console.error('Submission error:', error);
-        flashMessage.value = 'Error submitting answer';
-        flashType.value = 'error';
-    } finally {
         submittingBag.value = false;
     }
 };

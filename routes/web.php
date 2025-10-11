@@ -25,6 +25,9 @@ Route::get('/', [ContestController::class, 'show'])->name('home');
 
 // Bag Trivia - Shows Golden Question + Bag's trivia (Bag QR destination)
 Route::get('/trivia', [TriviaCodeController::class, 'show'])->name('trivia.show');
+Route::post('/trivia/submit', [TriviaCodeController::class, 'submitBagAnswer'])
+    ->middleware('throttle:10,1')
+    ->name('trivia.submit');
 
 // Public Pages
 Route::get('/about', [PageController::class, 'about'])->name('about');
