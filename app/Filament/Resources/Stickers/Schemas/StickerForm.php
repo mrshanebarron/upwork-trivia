@@ -22,10 +22,12 @@ class StickerForm
                             ->schema([
                                 TextInput::make('unique_code')
                                     ->label('Sticker Code')
-                                    ->required()
                                     ->unique(ignoreRecord: true)
                                     ->maxLength(255)
-                                    ->helperText('Unique QR code identifier'),
+                                    ->disabled(fn ($record) => $record !== null)
+                                    ->dehydrated(fn ($record) => $record === null)
+                                    ->placeholder('Auto-generated on save')
+                                    ->helperText('Unique QR code identifier (auto-generated)'),
 
                                 Select::make('status')
                                     ->label('Status')
