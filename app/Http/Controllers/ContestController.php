@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdBox;
 use App\Models\DailyQuestion;
 use App\Models\Sticker;
 use App\Services\ContestService;
@@ -39,6 +40,17 @@ class ContestController extends Controller
                 ->exists();
         }
 
+        // Load active advertisement boxes
+        $adBoxes = AdBox::where('is_active', true)
+            ->orderBy('order')
+            ->get()
+            ->map(fn($ad) => [
+                'id' => $ad->id,
+                'title' => $ad->title,
+                'url' => $ad->url,
+                'html_content' => $ad->html_content,
+            ]);
+
         return Inertia::render('Contest/GoldenQuestion', [
             'question' => $question ? [
                 'id' => $question->id,
@@ -58,6 +70,7 @@ class ContestController extends Controller
             'is_authenticated' => $isAuthenticated,
             'can_submit' => $canSubmit,
             'already_submitted' => $alreadySubmitted,
+            'ad_boxes' => $adBoxes,
         ]);
     }
 

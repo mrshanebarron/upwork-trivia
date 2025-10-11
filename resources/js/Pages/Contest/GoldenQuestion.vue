@@ -13,6 +13,7 @@ const props = defineProps({
     is_authenticated: Boolean,
     can_submit: Boolean,
     already_submitted: Boolean,
+    ad_boxes: Array,
 });
 
 const page = usePage();
@@ -233,7 +234,35 @@ const submitButtonText = computed(() => {
                         </div>
                     </div>
                 </div>
+
+                <!-- Advertisement Boxes -->
+                <div v-if="ad_boxes && ad_boxes.length > 0" class="mt-12 space-y-6">
+                    <div v-for="ad in ad_boxes" :key="ad.id">
+                        <CartoonCard>
+                            <a :href="ad.url" target="_blank" rel="noopener noreferrer" class="block">
+                                <div class="text-center">
+                                    <div class="text-sm text-gray-500 font-bold mb-2">ADVERTISEMENT</div>
+                                    <div v-html="ad.html_content" class="ad-content"></div>
+                                </div>
+                            </a>
+                        </CartoonCard>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </template>
+
+<style scoped>
+.ad-content :deep(h3) {
+    @apply text-2xl font-bold text-gray-900 mb-2;
+}
+
+.ad-content :deep(p) {
+    @apply text-lg text-gray-700;
+}
+
+.ad-content :deep(.ad-banner) {
+    @apply p-4 rounded-lg bg-gradient-to-r from-blue-50 to-purple-50;
+}
+</style>
