@@ -8,6 +8,7 @@ import CartoonCard from '@/Components/Animations/CartoonCard.vue';
 import { useRecaptcha } from '@/composables/useRecaptcha';
 
 const puppyContainer = ref(null);
+const isScrolled = ref(false);
 
 const props = defineProps({
     trivia_code: Object,
@@ -95,6 +96,7 @@ const submitButtonText = computed(() => {
 });
 
 onMounted(() => {
+    // Puppy positioning
     if (puppyContainer.value) {
         const updatePosition = () => {
             const spacer = puppyContainer.value.parentElement;
@@ -107,6 +109,12 @@ onMounted(() => {
         updatePosition();
         window.addEventListener('resize', updatePosition);
     }
+
+    // Header scroll background
+    const handleScroll = () => {
+        isScrolled.value = window.scrollY > 20;
+    };
+    window.addEventListener('scroll', handleScroll);
 });
 </script>
 
@@ -119,7 +127,7 @@ onMounted(() => {
         <CloudsAnimation />
 
         <!-- Header with Logo and Menu -->
-        <div class="fixed top-0 left-0 right-0 z-50 py-4 px-4 sm:px-6 lg:px-8">
+        <div class="fixed top-0 left-0 right-0 z-50 py-4 px-4 sm:px-6 lg:px-8 transition-all duration-300" :class="{ 'bg-white shadow-lg': isScrolled }">
             <div class="max-w-7xl mx-auto flex justify-between items-center">
                 <!-- Logo -->
                 <Link :href="route('home')" class="cursor-pointer">
@@ -128,19 +136,19 @@ onMounted(() => {
 
                 <!-- Navigation Menu -->
                 <nav class="flex gap-4 sm:gap-6 items-center">
-                    <Link :href="route('about')" class="text-white font-bold text-sm sm:text-base hover:text-yellow-300 transition-colors">
+                    <Link :href="route('about')" :class="[isScrolled ? 'text-gray-900 hover:text-yellow-600' : 'text-white hover:text-yellow-300', 'font-bold text-sm sm:text-base transition-colors']">
                         About
                     </Link>
-                    <Link :href="route('terms')" class="text-white font-bold text-sm sm:text-base hover:text-yellow-300 transition-colors">
+                    <Link :href="route('terms')" :class="[isScrolled ? 'text-gray-900 hover:text-yellow-600' : 'text-white hover:text-yellow-300', 'font-bold text-sm sm:text-base transition-colors']">
                         Terms
                     </Link>
-                    <Link :href="route('privacy')" class="text-white font-bold text-sm sm:text-base hover:text-yellow-300 transition-colors">
+                    <Link :href="route('privacy')" :class="[isScrolled ? 'text-gray-900 hover:text-yellow-600' : 'text-white hover:text-yellow-300', 'font-bold text-sm sm:text-base transition-colors']">
                         Privacy
                     </Link>
 
                     <!-- Auth Links -->
                     <template v-if="$page.props.auth.user">
-                        <Link :href="route('dashboard')" class="text-white font-bold text-sm sm:text-base hover:text-yellow-300 transition-colors">
+                        <Link :href="route('dashboard')" :class="[isScrolled ? 'text-gray-900 hover:text-yellow-600' : 'text-white hover:text-yellow-300', 'font-bold text-sm sm:text-base transition-colors']">
                             Dashboard
                         </Link>
                         <Link :href="route('logout')" method="post" as="button" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-bold text-sm rounded-lg transition-colors">
@@ -234,11 +242,13 @@ onMounted(() => {
                                 <p v-if="trivia_code.title" class="text-md text-gray-600 mt-1">{{ trivia_code.title }}</p>
                             </div>
 
-                            <div v-if="trivia_code.description" class="mb-6 p-4 bg-white/40 backdrop-blur-sm rounded-xl">
-                                <p class="text-gray-800">{{ trivia_code.description }}</p>
+                            <!-- Trivia Question -->
+                            <div v-if="trivia_code.description" class="mb-6 p-6 bg-white/60 backdrop-blur-sm rounded-xl border-2 border-white/70">
+                                <p class="text-xl font-semibold text-gray-900 text-center">{{ trivia_code.description }}</p>
                             </div>
 
-                            <div class="space-y-4">
+                            <!-- Answers -->
+                            <div v-if="trivia_code.answers && trivia_code.answers.length > 0" class="space-y-4">
                                 <div v-for="(answer, index) in trivia_code.answers" :key="answer.id"
                                      class="p-4 bg-white/60 backdrop-blur-sm rounded-xl border-2 border-white/70">
                                     <div class="flex items-start">
@@ -248,6 +258,9 @@ onMounted(() => {
                                         <p class="text-lg text-gray-900 flex-1">{{ answer.text }}</p>
                                     </div>
                                 </div>
+                            </div>
+                            <div v-else class="text-center p-6 bg-white/40 backdrop-blur-sm rounded-xl">
+                                <p class="text-gray-600">No answers available for this trivia code.</p>
                             </div>
                         </CartoonCard>
 

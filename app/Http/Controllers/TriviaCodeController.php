@@ -76,7 +76,7 @@ class TriviaCodeController extends Controller
                 'description' => $triviaCode->description,
                 'answers' => $triviaCode->answers->map(fn($answer) => [
                     'id' => $answer->id,
-                    'text' => $answer->text,
+                    'text' => $answer->answer, // Database column is 'answer', not 'text'
                     'order' => $answer->order,
                 ]),
             ],
