@@ -8,7 +8,6 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\HtmlString;
 
 class TriviaCodesTable
 {
@@ -20,10 +19,12 @@ class TriviaCodesTable
                     ->searchable(),
                 TextColumn::make('landing_page')
                     ->label('Landing Page')
-                    ->formatStateUsing(function ($record) {
-                        $url = route('trivia.show', ['code' => $record->code]);
-                        return new HtmlString('<a href="' . $url . '" target="_blank" class="text-blue-600 hover:underline">View Page →</a>');
-                    }),
+                    ->state(fn ($record) => route('trivia.show', ['code' => $record->code]))
+                    ->url(fn ($record) => route('trivia.show', ['code' => $record->code]))
+                    ->openUrlInNewTab()
+                    ->color('primary')
+                    ->icon('heroicon-o-arrow-top-right-on-square')
+                    ->limitLength(40),
                 TextColumn::make('title')
                     ->searchable(),
                 IconColumn::make('is_active')
