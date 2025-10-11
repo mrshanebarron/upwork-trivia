@@ -23,8 +23,7 @@ class TriviaCodesTable
                     ->url(fn ($record) => route('trivia.show', ['code' => $record->code]))
                     ->openUrlInNewTab()
                     ->color('primary')
-                    ->icon('heroicon-o-arrow-top-right-on-square')
-                    ->limitLength(40),
+                    ->icon('heroicon-o-arrow-top-right-on-square'),
                 TextColumn::make('title')
                     ->searchable(),
                 IconColumn::make('is_active')
