@@ -20,8 +20,8 @@ const props = defineProps({
         <SkyGrassBackground />
         <CloudsAnimation />
 
-        <!-- Header with Logo -->
-        <div class="fixed top-0 left-0 right-0 z-50 py-4 px-4 sm:px-6 lg:px-8 bg-white shadow-lg">
+        <!-- Header with Logo (Always White) -->
+        <div class="fixed top-0 left-0 right-0 z-50 py-4 px-4 sm:px-6 lg:px-8 bg-white shadow-lg transition-all duration-300">
             <div class="max-w-7xl mx-auto flex justify-center">
                 <Link :href="route('home')" class="cursor-pointer">
                     <img src="/images/logo.webp" alt="Poop Bag Trivia" class="h-20 sm:h-24 w-auto">

@@ -109,8 +109,8 @@ class TriviaCodeController extends Controller
             'answer' => 'required|string',
         ]);
 
-        // Get the trivia code
-        $triviaCode = TriviaCode::findOrFail($validated['trivia_code_id']);
+        // Get the trivia code with answers
+        $triviaCode = TriviaCode::with('answers')->findOrFail($validated['trivia_code_id']);
 
         // Create submission
         BagSubmission::create([
@@ -121,11 +121,9 @@ class TriviaCodeController extends Controller
             'user_agent' => $request->userAgent(),
         ]);
 
-        // For bag trivia, there's no "correct" answer - it's educational
-        // All answers shown are factual statements, not a quiz with one right answer
-        // We'll mark it as "correct" for positive reinforcement
-        $isCorrect = true;
-        $correctAnswer = $validated['answer']; // They all are correct facts
+        // Find the correct answer
+        $correctAnswer = $triviaCode->answers->where('is_correct', true)->first();
+        $isCorrect = $correctAnswer && $correctAnswer->answer === $validated['answer'];
 
         return Inertia::render('Trivia/BagTriviaResults', [
             'trivia_code' => [
@@ -134,7 +132,7 @@ class TriviaCodeController extends Controller
                 'title' => $triviaCode->title,
             ],
             'selected_answer' => $validated['answer'],
-            'correct_answer' => $correctAnswer,
+            'correct_answer' => $correctAnswer ? $correctAnswer->answer : null,
             'is_correct' => $isCorrect,
         ]);
     }
