@@ -10,8 +10,11 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Support\Facades\FilamentView;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -21,6 +24,23 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
+    public function boot(): void
+    {
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::HEAD_END,
+            fn (): string => Blade::render('<style>
+                @media (max-width: 768px) {
+                    .fi-main { padding-left: 0 !important; padding-right: 0 !important; }
+                    .fi-main-content { padding-left: 0.5rem !important; padding-right: 0.5rem !important; }
+                    .fi-fo-component-ctn { padding-left: 0.5rem !important; padding-right: 0.5rem !important; }
+                    .fi-ta { margin-left: 0 !important; margin-right: 0 !important; }
+                    .fi-section { padding-left: 0.5rem !important; padding-right: 0.5rem !important; }
+                    .fi-card { margin-left: 0 !important; margin-right: 0 !important; }
+                }
+            </style>')
+        );
+    }
+
     public function panel(Panel $panel): Panel
     {
         return $panel
@@ -32,7 +52,6 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Amber,
             ])
             ->maxContentWidth('full')
-            ->viteTheme('resources/css/filament-admin.css')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
