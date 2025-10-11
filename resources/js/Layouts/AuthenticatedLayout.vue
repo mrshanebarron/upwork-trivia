@@ -32,6 +32,11 @@ import CloudsAnimation from '@/Components/Animations/CloudsAnimation.vue';
                         Gift Cards
                     </Link>
 
+                    <!-- Admin Panel Link (only for admins) -->
+                    <a v-if="$page.props.auth?.user?.is_admin" href="/admin" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-sm rounded-lg transition-colors">
+                        Admin Panel
+                    </a>
+
                     <!-- User Menu -->
                     <div class="flex items-center gap-3 ml-4 pl-4 border-l-2 border-white/30">
                         <span class="text-white font-semibold text-sm hidden sm:block">
