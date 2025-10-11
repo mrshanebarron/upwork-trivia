@@ -145,7 +145,7 @@ const submitButtonText = computed(() => {
                 <!-- Two Column Grid Layout -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                     <!-- Left Column: Puppy -->
-                    <div class="flex justify-center items-center lg:sticky lg:top-32">
+                    <div class="flex justify-center items-center sticky top-32">
                         <div class="h-[60vh] w-auto max-w-full">
                             <PuppyAnimation />
                         </div>
