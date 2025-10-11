@@ -8,6 +8,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
 
 class StickerForm
 {
@@ -24,10 +25,16 @@ class StickerForm
                                     ->label('Sticker Code')
                                     ->unique(ignoreRecord: true)
                                     ->maxLength(255)
-                                    ->disabled(fn ($record) => $record !== null)
-                                    ->dehydrated(fn ($record) => $record === null)
-                                    ->placeholder('Auto-generated on save')
-                                    ->helperText('Unique QR code identifier (auto-generated)'),
+                                    ->disabled()
+                                    ->dehydrated()
+                                    ->default(function () {
+                                        // Generate unique code before form load
+                                        do {
+                                            $code = Str::random(12);
+                                        } while (\App\Models\Sticker::where('unique_code', $code)->exists());
+                                        return $code;
+                                    })
+                                    ->helperText('Unique QR code identifier (auto-generated, cannot be edited)'),
 
                                 Select::make('status')
                                     ->label('Status')
