@@ -5,6 +5,7 @@ namespace App\Filament\Resources\TriviaCodes;
 use App\Filament\Resources\TriviaCodes\Pages\CreateTriviaCode;
 use App\Filament\Resources\TriviaCodes\Pages\EditTriviaCode;
 use App\Filament\Resources\TriviaCodes\Pages\ListTriviaCodes;
+use App\Filament\Resources\TriviaCodes\Pages\ViewTriviaCode;
 use App\Filament\Resources\TriviaCodes\Schemas\TriviaCodeForm;
 use App\Filament\Resources\TriviaCodes\Tables\TriviaCodesTable;
 use App\Models\TriviaCode;
@@ -48,6 +49,7 @@ class TriviaCodeResource extends Resource
         return [
             'index' => ListTriviaCodes::route('/'),
             'create' => CreateTriviaCode::route('/create'),
+            'view' => ViewTriviaCode::route('/{record}'),
             'edit' => EditTriviaCode::route('/{record}/edit'),
         ];
     }
