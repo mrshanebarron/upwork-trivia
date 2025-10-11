@@ -141,18 +141,16 @@ const submitButtonText = computed(() => {
 
         <!-- Main Content -->
         <div class="pt-32 pb-12 relative z-10">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <!-- Two Column Grid Layout -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-                    <!-- Left Column: Puppy -->
-                    <div class="flex justify-center items-center lg:sticky lg:top-32">
-                        <div class="h-[60vh] w-auto max-w-full">
-                            <PuppyAnimation />
-                        </div>
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Puppy at top center -->
+                <div class="flex justify-center items-center mb-8">
+                    <div class="h-[300px] w-auto">
+                        <PuppyAnimation />
                     </div>
+                </div>
 
-                    <!-- Right Column: Content -->
-                    <div class="space-y-6">
+                <!-- Content Below -->
+                <div class="space-y-6">
                         <!-- Golden Question Section -->
                         <div v-if="question">
                             <!-- Contest Header -->
@@ -273,7 +271,6 @@ const submitButtonText = computed(() => {
                 </div>
             </div>
         </div>
-    </div>
 </template>
 
 <style scoped>
