@@ -194,6 +194,18 @@ const submitButtonText = computed(() => {
                             <div class="border-t-4 border-white/50"></div>
                         </div>
 
+                        <!-- First Advertisement (Above Trivia) -->
+                        <div v-if="ad_boxes && ad_boxes.length > 0">
+                            <CartoonCard>
+                                <a :href="ad_boxes[0].url" target="_blank" rel="noopener noreferrer" class="block">
+                                    <div class="text-center">
+                                        <div class="text-sm text-gray-500 font-bold mb-2">ADVERTISEMENT</div>
+                                        <div v-html="ad_boxes[0].html_content" class="ad-content"></div>
+                                    </div>
+                                </a>
+                            </CartoonCard>
+                        </div>
+
                         <!-- Bag Trivia Section -->
                         <CartoonCard variant="secondary">
                             <div class="text-center mb-6">
@@ -219,18 +231,16 @@ const submitButtonText = computed(() => {
                             </div>
                         </CartoonCard>
 
-                        <!-- Advertisement Boxes -->
-                        <div v-if="ad_boxes && ad_boxes.length > 0" class="space-y-6">
-                            <div v-for="ad in ad_boxes" :key="ad.id">
-                                <CartoonCard>
-                                    <a :href="ad.url" target="_blank" rel="noopener noreferrer" class="block">
-                                        <div class="text-center">
-                                            <div class="text-sm text-gray-500 font-bold mb-2">ADVERTISEMENT</div>
-                                            <div v-html="ad.html_content" class="ad-content"></div>
-                                        </div>
-                                    </a>
-                                </CartoonCard>
-                            </div>
+                        <!-- Second Advertisement (Below Trivia) -->
+                        <div v-if="ad_boxes && ad_boxes.length > 1">
+                            <CartoonCard>
+                                <a :href="ad_boxes[1].url" target="_blank" rel="noopener noreferrer" class="block">
+                                    <div class="text-center">
+                                        <div class="text-sm text-gray-500 font-bold mb-2">ADVERTISEMENT</div>
+                                        <div v-html="ad_boxes[1].html_content" class="ad-content"></div>
+                                    </div>
+                                </a>
+                            </CartoonCard>
                         </div>
                     </div>
                 </div>
