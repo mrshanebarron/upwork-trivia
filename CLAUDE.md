@@ -126,20 +126,81 @@ Two separate but integrated systems:
 
 ### Page Structure & User Flow
 
+## ✅ COMPLETE USER FLOWS (DOCUMENTED OCT 11, 2025)
+
+### GOLDEN QUESTION CONTEST (Homepage - Sticker QR Codes)
+
+**Flow 1: Wrong Answer**
+1. User scans sticker QR → Homepage
+2. User sees Golden Question with multiple choice (A, B, C, D)
+3. User selects answer and clicks Submit
+4. **WRONG ANSWER** → Results page: "Sorry, incorrect! Try again tomorrow."
+5. Show correct answer (educational)
+6. Link back to homepage
+
+**Flow 2: Correct Answer (FIRST PERSON WINS)**
+1. User scans sticker QR → Homepage
+2. User sees Golden Question with multiple choice (A, B, C, D)
+3. User selects CORRECT answer and clicks Submit
+4. **CORRECT + FIRST** → Results page: "Congratulations! You won $10! Register to claim your prize."
+5. User clicks "Register to Claim"
+6. Registration form (name, email, password, age verification)
+7. Auto-login after registration
+8. Redirect to Dashboard with prize claim instructions
+9. Dashboard shows: "You won $10! Check your email for your gift card."
+
+**Flow 3: Correct Answer (TOO LATE)**
+1. User submits correct answer after someone else already won
+2. Results page: "Correct! But someone beat you to it. Try again tomorrow!"
+3. Link back to homepage
+
+**Flow 4: Already Submitted Today**
+1. User tries to submit again same day
+2. Block submission, show error: "You've already submitted today. Come back tomorrow!"
+
+---
+
+### BAG TRIVIA (Bag QR Codes - /trivia?code=1234)
+
+**Flow: Casual Play (No Prize)**
+1. User scans bag QR → Trivia page with code auto-loaded
+2. User sees:
+   - Golden Question teaser at top (links to homepage for prize)
+   - Bag's trivia question with answers already shown
+   - Multiple choice (A, B, C, D)
+3. User selects answer and clicks Submit
+4. **Results page**: "Thanks for playing!"
+5. Show if answer was correct or incorrect (educational feedback)
+6. Show correct answer
+7. "Scan another bag or try today's Golden Question for a prize!"
+8. Links: Back to trivia page | Try Golden Question
+
+**Key Differences from Golden Question:**
+- No registration required
+- No prizes
+- Just for fun/engagement
+- Educational - shows correct answer after submission
+- Can submit multiple times (no daily limit)
+- Encourages users to try Golden Question for actual prizes
+
+---
+
 **HOMEPAGE (Sticker QR Scan):**
 ```
 ┌─────────────────────────────────────┐
-│  [Animated puppy, plane, clouds]    │
+│  [Animated puppy, clouds]           │
 │  🏆 TODAY'S GOLDEN QUESTION         │
 │  [Glassmorphism window]             │
+│  "What breed is known as..."        │
+│  [Multiple choice: A, B, C, D]      │
+│  [Submit Answer Button]             │
 │  "First correct answer wins $10!"   │
-│  [Scan QR at dog stations to play]  │
 └─────────────────────────────────────┘
 
 ┌─────────────────────────────────────┐
 │  📢 SPONSORED BY: [Future Sponsor]  │
 │  [Rick's ad system]                 │
-└─────────────────────────────────────┐
+└─────────────────────────────────────┘
 
 ┌─────────────────────────────────────┐
 │  📢 ADVERTISEMENT BOX 2             │
@@ -149,36 +210,27 @@ Two separate but integrated systems:
 **BAG QR CODE PAGE (Code Auto-Loaded):**
 ```
 ┌─────────────────────────────────────┐
-│  🏆 TODAY'S GOLDEN QUESTION         │
-│  [Glassmorphism window with puppy]  │
-│  "What breed is known as..."        │
-│  [Multiple choice: A, B, C, D]      │
-│  [Answer input if logged in]        │
+│  🏆 TODAY'S GOLDEN QUESTION TEASER  │
+│  [Clickable card linking to home]   │
+│  "Click to Answer & Win $10!"       │
 └─────────────────────────────────────┘
 
 ┌─────────────────────────────────────┐
 │  📢 ADVERTISEMENT BOX 1             │
-│  (Rick's existing ad system)        │
+└─────────────────────────────────────┘
+
+┌─────────────────────────────────────┐
+│  📝 YOUR BAG'S TRIVIA (For Fun!)    │
+│  Code #1234 - Dog Breeds            │
+│  Question: "What breed is known..." │
+│  [Multiple choice: A, B, C, D]      │
+│  [Submit Answer Button]             │
 └─────────────────────────────────────┘
 
 ┌─────────────────────────────────────┐
 │  📢 ADVERTISEMENT BOX 2             │
 └─────────────────────────────────────┘
-
-┌─────────────────────────────────────┐
-│  📝 YOUR BAG'S TRIVIA QUESTIONS     │
-│  Code #1234                         │
-│  • Question 1: Answer               │
-│  • Question 2: Answer               │
-│  • Question 3: Answer               │
-└─────────────────────────────────────┘
 ```
-
-**Homepage Purpose:**
-- Teases Golden Question ("available at participating locations")
-- Showcases full animated puppy experience
-- Creates FOMO - drives scans at dog stations
-- Premium sponsor ad placement
 
 ---
 
