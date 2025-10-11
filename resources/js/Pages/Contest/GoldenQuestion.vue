@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { Head, router, Link, usePage } from '@inertiajs/vue3';
 import SkyGrassBackground from '@/Components/Animations/SkyGrassBackground.vue';
 import CloudsAnimation from '@/Components/Animations/CloudsAnimation.vue';
@@ -20,6 +20,21 @@ const page = usePage();
 const selectedAnswer = ref(null);
 const submitting = ref(false);
 const { execute: executeRecaptcha } = useRecaptcha();
+
+// Scroll detection for header background
+const isScrolled = ref(false);
+
+const handleScroll = () => {
+    isScrolled.value = window.scrollY > 50;
+};
+
+onMounted(() => {
+    window.addEventListener('scroll', handleScroll);
+});
+
+onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll);
+});
 
 // Flash message state
 const flashMessage = ref(null);
@@ -104,7 +119,8 @@ const submitButtonText = computed(() => {
         <CloudsAnimation />
 
         <!-- Header with Logo and Menu -->
-        <div class="fixed top-0 left-0 right-0 z-50 py-4 px-4 sm:px-6 lg:px-8">
+        <div class="fixed top-0 left-0 right-0 z-50 py-4 px-4 sm:px-6 lg:px-8 transition-all duration-300"
+             :class="{ 'bg-white shadow-lg': isScrolled }">
             <div class="max-w-7xl mx-auto flex justify-between items-center">
                 <!-- Logo -->
                 <Link :href="route('home')" class="cursor-pointer">
@@ -113,19 +129,23 @@ const submitButtonText = computed(() => {
 
                 <!-- Navigation Menu -->
                 <nav class="flex gap-4 sm:gap-6 items-center">
-                    <Link :href="route('about')" class="text-white font-bold text-sm sm:text-base hover:text-yellow-300 transition-colors">
+                    <Link :href="route('about')" class="font-bold text-sm sm:text-base transition-colors"
+                          :class="isScrolled ? 'text-gray-800 hover:text-gray-600' : 'text-white hover:text-yellow-300'">
                         About
                     </Link>
-                    <Link :href="route('terms')" class="text-white font-bold text-sm sm:text-base hover:text-yellow-300 transition-colors">
+                    <Link :href="route('terms')" class="font-bold text-sm sm:text-base transition-colors"
+                          :class="isScrolled ? 'text-gray-800 hover:text-gray-600' : 'text-white hover:text-yellow-300'">
                         Terms
                     </Link>
-                    <Link :href="route('privacy')" class="text-white font-bold text-sm sm:text-base hover:text-yellow-300 transition-colors">
+                    <Link :href="route('privacy')" class="font-bold text-sm sm:text-base transition-colors"
+                          :class="isScrolled ? 'text-gray-800 hover:text-gray-600' : 'text-white hover:text-yellow-300'">
                         Privacy
                     </Link>
 
                     <!-- Auth Links -->
                     <template v-if="$page.props.auth.user">
-                        <Link :href="route('dashboard')" class="text-white font-bold text-sm sm:text-base hover:text-yellow-300 transition-colors">
+                        <Link :href="route('dashboard')" class="font-bold text-sm sm:text-base transition-colors"
+                              :class="isScrolled ? 'text-gray-800 hover:text-gray-600' : 'text-white hover:text-yellow-300'">
                             Dashboard
                         </Link>
                         <Link :href="route('logout')" method="post" as="button" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-bold text-sm rounded-lg transition-colors">
