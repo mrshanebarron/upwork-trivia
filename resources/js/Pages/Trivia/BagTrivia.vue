@@ -1,11 +1,13 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { Head, router, Link, usePage } from '@inertiajs/vue3';
 import SkyGrassBackground from '@/Components/Animations/SkyGrassBackground.vue';
 import CloudsAnimation from '@/Components/Animations/CloudsAnimation.vue';
 import PuppyAnimation from '@/Components/Animations/PuppyAnimation.vue';
 import CartoonCard from '@/Components/Animations/CartoonCard.vue';
 import { useRecaptcha } from '@/composables/useRecaptcha';
+
+const puppyContainer = ref(null);
 
 const props = defineProps({
     trivia_code: Object,
@@ -91,6 +93,21 @@ const submitButtonText = computed(() => {
     if (submitting.value) return 'Submitting...';
     return 'Submit Answer';
 });
+
+onMounted(() => {
+    if (puppyContainer.value) {
+        const updatePosition = () => {
+            const spacer = puppyContainer.value.parentElement;
+            if (spacer) {
+                const rect = spacer.getBoundingClientRect();
+                puppyContainer.value.style.left = `${rect.left}px`;
+                puppyContainer.value.style.width = `${rect.width}px`;
+            }
+        };
+        updatePosition();
+        window.addEventListener('resize', updatePosition);
+    }
+});
 </script>
 
 <template>
@@ -139,23 +156,19 @@ const submitButtonText = computed(() => {
             </div>
         </div>
 
-        <!-- Fixed Puppy (Desktop Only) -->
-        <div class="hidden lg:block fixed left-0 top-32 w-1/2 max-w-[592px] h-[calc(100vh-8rem)] z-10 pointer-events-none">
-            <div class="flex justify-center items-center h-full px-4">
-                <div class="h-[60vh] w-auto pointer-events-auto">
-                    <PuppyAnimation />
-                </div>
-            </div>
-        </div>
-
         <!-- Main Content -->
         <div class="pt-32 pb-12 relative z-10">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Two Column Grid Layout -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- Left Column: Puppy (Spacer) -->
-                    <div class="hidden lg:block">
-                        <!-- Empty spacer for grid layout -->
+                    <!-- Left Column: Puppy (Spacer for layout) -->
+                    <div class="hidden lg:block relative">
+                        <!-- Fixed Puppy inside grid column -->
+                        <div ref="puppyContainer" class="fixed top-32 flex justify-center items-center h-[calc(100vh-8rem)]">
+                            <div class="h-[60vh] w-auto">
+                                <PuppyAnimation />
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Right Column: Content -->
