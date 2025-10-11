@@ -33,14 +33,6 @@ defineProps({
     box-shadow:
         0 8px 32px 0 rgba(31, 38, 135, 0.15),
         inset 0 1px 0 0 rgba(255, 255, 255, 0.5);
-    transition: all 0.3s ease;
-}
-
-.glassmorphism-card:hover {
-    transform: translateY(-5px);
-    box-shadow:
-        0 12px 40px 0 rgba(31, 38, 135, 0.25),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0.5);
 }
 
 /* Variants */
@@ -75,27 +67,6 @@ defineProps({
 .card-content {
     color: rgba(0, 0, 0, 0.8);
     line-height: 1.6;
-}
-
-/* Add subtle shimmer effect */
-.glassmorphism-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.3),
-        transparent
-    );
-    transition: left 0.5s ease;
-}
-
-.glassmorphism-card:hover::before {
-    left: 100%;
 }
 
 /* Responsive */

@@ -30,14 +30,14 @@ class ContestService
      * Submit an answer to the active question
      */
     public function submitAnswer(
-        User $user,
+        ?User $user, // Can be null for guests
         DailyQuestion $question,
         string $answer,
         ?int $stickerId = null,
         ?array $geolocation = null,
         ?string $deviceFingerprint = null
     ): array {
-        // Anti-cheat validation
+        // Anti-cheat validation (IP-based for guests)
         $antiCheatCheck = $this->antiCheatService->validateSubmission($user, $question, request()->ip(), $deviceFingerprint);
 
         if (!$antiCheatCheck['allowed']) {
@@ -45,15 +45,6 @@ class ContestService
                 'success' => false,
                 'error' => $antiCheatCheck['reason'],
                 'code' => $antiCheatCheck['code']
-            ];
-        }
-
-        // Check if user can win (30-day cooldown)
-        if (!$user->canWin()) {
-            return [
-                'success' => false,
-                'error' => 'You won within the last 30 days. You can participate again after ' . $user->last_won_at->addDays(30)->format('M j, Y'),
-                'code' => 'COOLDOWN_ACTIVE'
             ];
         }
 
@@ -71,7 +62,7 @@ class ContestService
             // Create submission
             $submission = Submission::create([
                 'daily_question_id' => $question->id,
-                'user_id' => $user->id,
+                'user_id' => $user?->id, // Null for guests
                 'selected_answer' => strtoupper($answer),
                 'is_correct' => strtoupper($answer) === $question->correct_answer,
                 'ip_address' => request()->ip(),
@@ -96,15 +87,30 @@ class ContestService
             ];
 
             // Check if this is a winning submission
-            if ($submission->is_correct && $submission->isWinner()) {
-                $winner = $this->processWinner($submission);
-                $result['is_winner'] = true;
-                $result['winner_id'] = $winner->id;
-                $result['prize_amount'] = $winner->prize_amount;
+            // Must be correct, first answer, and (if user exists) user must be able to win
+            $canWin = $user ? $user->canWin() : true; // Guests can always win
+
+            if ($submission->is_correct && $submission->wouldWin() && $canWin) {
+                // For guests, just mark as potential winner - they'll claim after registering
+                // For authenticated users, process winner immediately
+                if ($user) {
+                    $winner = $this->processWinner($submission);
+                    $result['is_winner'] = true;
+                    $result['winner_id'] = $winner->id;
+                    $result['prize_amount'] = $winner->prize_amount;
+                } else {
+                    // Guest winner - they need to register to claim
+                    $result['is_winner'] = true;
+                    $result['prize_amount'] = $question->prize_amount;
+                }
             } else {
                 $result['is_winner'] = false;
                 if ($submission->is_correct) {
-                    $result['message'] = 'Correct answer, but someone answered first!';
+                    if ($user && !$user->canWin()) {
+                        $result['message'] = 'Correct answer! However, you won within the last 30 days. You can win again after ' . $user->last_won_at->addDays(30)->format('M j, Y');
+                    } else {
+                        $result['message'] = 'Correct answer, but someone answered first!';
+                    }
                 } else {
                     $result['message'] = 'Incorrect answer. Better luck next time!';
                     $result['correct_answer'] = $question->correct_answer;
@@ -169,18 +175,25 @@ class ContestService
      */
     protected function deductFromPrizePool(float $amount): void
     {
-        $currentMonth = now()->startOfMonth()->toDateString();
+        $currentMonth = now()->startOfMonth();
 
-        $pool = PrizePool::firstOrCreate(
-            ['month' => $currentMonth],
-            ['budget' => 0, 'spent' => 0, 'is_active' => true]
-        );
+        // Get existing or create new pool - use date() to match stored format
+        $pool = PrizePool::whereDate('month', $currentMonth)->first();
 
-        $pool->increment('spent', $amount);
+        if (!$pool) {
+            $pool = PrizePool::create([
+                'month' => $currentMonth,
+                'budget' => 0,
+                'spent' => $amount,
+                'is_active' => true
+            ]);
+        } else {
+            $pool->increment('spent', $amount);
+        }
 
         // Check if budget is depleted
         if ($pool->isDepleted()) {
-            Log::warning('Prize pool depleted', ['month' => $currentMonth]);
+            Log::warning('Prize pool depleted', ['month' => $currentMonth->toDateString()]);
         }
     }
 

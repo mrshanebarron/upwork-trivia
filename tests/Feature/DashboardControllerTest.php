@@ -72,7 +72,7 @@ class DashboardControllerTest extends TestCase
 
         $response->assertInertia(fn ($page) => $page
             ->has('winners')
-            ->where('user.total_winnings', 10.00)
+            ->where('user.total_winnings', 10)
         );
     }
 
@@ -139,7 +139,7 @@ class DashboardControllerTest extends TestCase
         $response = $this->actingAs($this->user)->get(route('dashboard.winnings'));
 
         $response->assertInertia(fn ($page) => $page
-            ->where('total_winnings', 30.00)
+            ->where('total_winnings', 30)
             ->where('total_wins', 3)
         );
     }
@@ -227,7 +227,7 @@ class DashboardControllerTest extends TestCase
             ->where('stats.total', 2)
             ->where('stats.correct', 1)
             ->where('stats.incorrect', 1)
-            ->where('stats.accuracy', 50.0)
+            ->where('stats.accuracy', 50)
         );
     }
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ContestController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScanController;
 use Illuminate\Support\Facades\Route;
@@ -21,20 +22,29 @@ use Inertia\Inertia;
 // Homepage - Shows Golden Question (Sticker QR destination)
 Route::get('/', [ContestController::class, 'show'])->name('home');
 
-// Legal Pages
-Route::get('/terms', fn() => Inertia::render('Legal/Terms'))->name('terms');
-Route::get('/privacy', fn() => Inertia::render('Legal/Privacy'))->name('privacy');
+// Public Pages
+Route::get('/about', [PageController::class, 'about'])->name('about');
+Route::get('/terms', [PageController::class, 'terms'])->name('terms');
+Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
 
 // QR Code Scan Routes
 Route::match(['get', 'post'], '/scan/{code}', [ScanController::class, 'scan'])->name('scan');
 Route::get('/stickers/{sticker}', [ScanController::class, 'show'])->name('stickers.show');
 
 // Contest Routes
-Route::middleware(['auth', 'age_verified', 'contest_active'])->group(function () {
-    // Golden Question
+Route::middleware(['contest_active'])->group(function () {
+    // Golden Question - Public view and submission
     Route::get('/contest', [ContestController::class, 'show'])->name('contest.show');
-    Route::post('/contest/submit', [ContestController::class, 'submit'])->name('contest.submit');
-    Route::get('/contest/winner/{submission}', [ContestController::class, 'winner'])->name('contest.winner');
+    Route::post('/contest/submit', [ContestController::class, 'submit'])
+        ->middleware('throttle:10,1') // Max 10 submissions per minute per IP
+        ->name('contest.submit');
+
+    // Winner page - requires authentication to claim prize
+    Route::middleware(['auth', 'age_verified'])->group(function () {
+        Route::get('/contest/claim/{submission}', [ContestController::class, 'claim'])->name('contest.claim');
+    });
+
+    // Results page - public
     Route::get('/contest/results/{question}', [ContestController::class, 'results'])->name('contest.results');
 });
 
@@ -49,6 +59,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Admin Routes
+    Route::middleware(\App\Http\Middleware\EnsureUserIsAdmin::class)->group(function () {
+        Route::get('/admin/import-questions', \App\Livewire\Admin\ImportQuestions::class)
+            ->name('admin.import-questions');
+    });
 });
 
 require __DIR__.'/auth.php';

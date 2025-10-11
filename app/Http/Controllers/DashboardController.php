@@ -87,7 +87,7 @@ class DashboardController extends Controller
                 'total' => $totalSubmissions,
                 'correct' => $correctSubmissions,
                 'incorrect' => $totalSubmissions - $correctSubmissions,
-                'accuracy' => $totalSubmissions > 0 ? round(($correctSubmissions / $totalSubmissions) * 100, 1) : 0,
+                'accuracy' => $totalSubmissions > 0 ? (float) round(($correctSubmissions / $totalSubmissions) * 100, 1) : 0.0,
             ],
         ]);
     }

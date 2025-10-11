@@ -35,7 +35,23 @@ class RegisteredUserController extends Controller
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'birthdate' => 'required|date|before:-18 years',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            // Honeypot fields - must be empty
+            'website' => 'nullable|max:0',
+            'phone' => 'nullable|max:0',
+            'company' => 'nullable|max:0',
         ]);
+
+        // Honeypot check - if any honeypot field is filled, it's a bot
+        if (!empty($request->website) || !empty($request->phone) || !empty($request->company)) {
+            \Log::warning('Registration honeypot triggered', [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'email' => $request->email,
+            ]);
+
+            // Pretend success to not reveal the honeypot
+            return redirect(route('login'))->with('status', 'Registration successful! Please log in.');
+        }
 
         $user = User::create([
             'name' => $request->name,

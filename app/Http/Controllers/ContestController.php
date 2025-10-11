@@ -27,6 +27,18 @@ class ContestController extends Controller
             $sticker = Sticker::where('unique_code', $code)->first();
         }
 
+        // Check user eligibility if authenticated
+        $canSubmit = false;
+        $alreadySubmitted = false;
+        $isAuthenticated = auth()->check();
+
+        if ($isAuthenticated && $question) {
+            $canSubmit = auth()->user()->canWin();
+            $alreadySubmitted = auth()->user()->submissions()
+                ->where('daily_question_id', $question->id)
+                ->exists();
+        }
+
         return Inertia::render('Contest/GoldenQuestion', [
             'question' => $question ? [
                 'id' => $question->id,
@@ -43,15 +55,14 @@ class ContestController extends Controller
                 'location_name' => $sticker->location_name,
                 'property_name' => $sticker->property_name,
             ] : null,
-            'can_submit' => auth()->check() && auth()->user()->canWin(),
-            'already_submitted' => auth()->check() && auth()->user()->submissions()
-                ->where('daily_question_id', $question?->id)
-                ->exists(),
+            'is_authenticated' => $isAuthenticated,
+            'can_submit' => $canSubmit,
+            'already_submitted' => $alreadySubmitted,
         ]);
     }
 
     /**
-     * Submit an answer to the daily question
+     * Submit an answer to the daily question (public - no auth required)
      */
     public function submit(Request $request)
     {
@@ -63,12 +74,27 @@ class ContestController extends Controller
             'longitude' => 'nullable|numeric',
             'device_fingerprint' => 'nullable|string',
             'recaptcha_token' => ['nullable', new \App\Rules\RecaptchaRule()],
+            // Honeypot fields - must be empty
+            'website' => 'nullable|max:0',
+            'email_hp' => 'nullable|max:0',
+            'subscribe' => 'nullable|accepted',
         ]);
+
+        // Honeypot check - if any honeypot field is filled, it's a bot
+        if (!empty($validated['website']) || !empty($validated['email_hp']) || !empty($validated['subscribe'])) {
+            \Log::warning('Honeypot triggered', [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'question_id' => $validated['question_id'],
+            ]);
+
+            return back()->with('error', 'Invalid submission. Please try again.');
+        }
 
         $question = DailyQuestion::findOrFail($validated['question_id']);
 
         $result = $this->contestService->submitAnswer(
-            user: auth()->user(),
+            user: auth()->user(), // Can be null for guests
             question: $question,
             answer: $validated['answer'],
             stickerId: $validated['sticker_id'] ?? null,
@@ -84,11 +110,39 @@ class ContestController extends Controller
         }
 
         if ($result['is_winner']) {
-            return redirect()->route('contest.winner', ['submission' => $result['submission_id']])
-                ->with('success', "🎉 Congratulations! You won ${$result['prize_amount']}!");
+            // Store submission ID in session and redirect to register/login
+            session(['pending_win_submission' => $result['submission_id']]);
+
+            if (!auth()->check()) {
+                return redirect()->route('register')
+                    ->with('success', "🎉 Congratulations! You got it right and you're the first! Register to claim your ${$result['prize_amount']} prize!");
+            }
+
+            // Already authenticated, go to claim page
+            return redirect()->route('contest.claim', ['submission' => $result['submission_id']]);
         }
 
         return back()->with('info', $result['message']);
+    }
+
+    /**
+     * Claim prize for a winning submission (requires auth)
+     */
+    public function claim(Request $request)
+    {
+        $submission = Submission::with(['dailyQuestion', 'winner', 'winner.giftCard'])
+            ->findOrFail($request->route('submission'));
+
+        // Verify this submission is a winner
+        if (!$submission->is_correct || !$submission->wouldWin()) {
+            abort(404);
+        }
+
+        return Inertia::render('Contest/Winner', [
+            'submission' => $submission,
+            'winner' => $submission->winner,
+            'gift_card' => $submission->winner?->giftCard,
+        ]);
     }
 
     /**

@@ -25,6 +25,8 @@ class Submission extends Model
         'random_tiebreaker',
     ];
 
+    protected $appends = ['is_winner'];
+
     protected function casts(): array
     {
         return [
@@ -53,9 +55,9 @@ class Submission extends Model
     }
 
     /**
-     * Determine if this submission won
+     * Determine if this submission won (check timestamps)
      */
-    public function isWinner(): bool
+    public function wouldWin(): bool
     {
         if (!$this->is_correct) {
             return false;
@@ -74,6 +76,14 @@ class Submission extends Model
             ->exists();
 
         return !$earlierCorrect;
+    }
+
+    /**
+     * Get is_winner accessor - check if this submission has a winner record
+     */
+    public function getIsWinnerAttribute(): bool
+    {
+        return $this->winner()->exists();
     }
 
     // Relationships

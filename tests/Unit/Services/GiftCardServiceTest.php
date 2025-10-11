@@ -34,7 +34,6 @@ class GiftCardServiceTest extends TestCase
             'user_id' => $user->id,
             'daily_question_id' => $question->id,
             'prize_amount' => 10.00,
-            'won_at' => now(),
         ]);
     }
 
@@ -85,14 +84,18 @@ class GiftCardServiceTest extends TestCase
     #[Test]
     public function it_handles_api_failure_gracefully()
     {
-        config(['app.env' => 'production']);
+        // Override the service to force production mode
+        app()->bind('env', fn() => 'production');
         config(['services.tremendous.api_key' => 'test_key']);
+        config(['services.tremendous.funding_source_id' => 'funding_123']);
 
         Http::fake([
             '*' => Http::response(['error' => 'API Error'], 500),
         ]);
 
-        $giftCard = $this->service->deliverGiftCard($this->winner);
+        // Recreate service to pick up new config
+        $service = new \App\Services\GiftCardService();
+        $giftCard = $service->deliverGiftCard($this->winner);
 
         $this->assertEquals('failed', $giftCard->status);
         $this->assertNotNull($giftCard->error_message);
@@ -101,7 +104,8 @@ class GiftCardServiceTest extends TestCase
     #[Test]
     public function it_sends_correct_data_to_tremendous_api()
     {
-        config(['app.env' => 'production']);
+        // Override the service to force production mode
+        app()->bind('env', fn() => 'production');
         config(['services.tremendous.api_key' => 'test_key']);
         config(['services.tremendous.funding_source_id' => 'funding_123']);
 
@@ -115,7 +119,9 @@ class GiftCardServiceTest extends TestCase
             ], 200),
         ]);
 
-        $this->service->deliverGiftCard($this->winner);
+        // Recreate service to pick up new config
+        $service = new \App\Services\GiftCardService();
+        $service->deliverGiftCard($this->winner);
 
         Http::assertSent(function ($request) {
             return $request->hasHeader('Authorization', 'Bearer test_key') &&

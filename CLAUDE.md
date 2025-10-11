@@ -1,4 +1,4 @@
-# Rick's Doggy Bag Trivia System
+# Poop Bag Trivia
 
 ---
 
@@ -11,7 +11,7 @@
 **Payment Status:** Already paid for Phase 1, approved Phase 2
 
 **Business Background:**
-- Former property manager who identified opportunity: communities buy massive quantities of doggy bags
+- Former property manager who identified opportunity: communities buy massive quantities of poop bags
 - Also selling solar panel lights to same market (dog station accessories)
 - B2B model: sells to property managers, trivia adds resident engagement value
 - Vision: Eventually bring in sponsors (Purina, Petco, Chewy) to fund gift cards and advertise
@@ -38,12 +38,13 @@
   - Analytics dashboard specs
   - 6-week implementation timeline
 
-**Session Progress (Oct 8, 2025):**
-- ✅ Gathered complete Phase 2 requirements from Rick meeting
-- ✅ Researched gift card APIs (5 providers analyzed)
-- ✅ Identified 14 critical gaps in original plan
-- ✅ Categorized features into MVP vs Phase 2
-- ⏳ Ready to design database schema and begin development
+**Session Progress:**
+- ✅ Oct 8, 2025: Gathered complete Phase 2 requirements from Rick meeting
+- ✅ Oct 8, 2025: Researched gift card APIs (5 providers analyzed)
+- ✅ Oct 10, 2025: Built trivia question import system (The Trivia API integration)
+- ✅ Oct 10, 2025: Implemented Shane's custom background SVG artwork
+- ✅ Oct 10, 2025: Removed plane animation, adjusted layer stacking
+- ⏳ Local development in progress
 
 ---
 
@@ -51,7 +52,7 @@
 
 **Job ID:** 021974205472992779510
 **Delivery:** Same night, ~4 hours
-**Status:** Live at https://trivia.sbarron.com
+**Status:** Testing at https://trivia.sbarron.com (DigitalOcean staging)
 
 **What Was Built:**
 - 4-digit code entry system
@@ -76,10 +77,10 @@
 Two separate but integrated systems:
 
 **1. BAG SYSTEM (Enhanced from Phase 1):**
-- Each roll of doggy bags = same trivia questions printed
+- Each roll of poop bags = same trivia questions printed
 - Each bag has 3 things printed:
-  - QR code → `https://trivia.sbarron.com?code=1234` (auto-loads)
-  - Website URL → `https://trivia.sbarron.com`
+  - QR code → `https://poopbagtrivia.com?code=1234` (auto-loads)
+  - Website URL → `https://poopbagtrivia.com`
   - 4-digit code → `1234` (for manual entry)
 - Bag QR scan → Shows bag's questions + ads + **TODAY'S GOLDEN QUESTION** at top
 
@@ -98,7 +99,7 @@ Two separate but integrated systems:
 **Future Vision:** Purina/Petco/Chewy sponsors fund prizes, Rick provides platform + analytics
 
 **Rick's B2B Sales Strategy:**
-- Sells bags + solar lights to property managers
+- Sells poop bags + solar lights to property managers
 - Differentiator: "Our bags provide resident engagement + analytics"
 - Properties get amenity value: "Our dog stations have daily trivia with prizes"
 - Analytics/heatmaps = proof of ROI for future sponsor pitches
@@ -109,11 +110,10 @@ Two separate but integrated systems:
 
 **Visual Theme:**
 - Cartoon style website
-- Green grass + sky background
-- 3D plane flying by occasionally
+- Custom SVG background (sky + grass) - Shane's artwork
 - Moving clouds animation
 - **Animated puppy character** next to glassmorphism info window
-- Shane is creating all assets: puppy, plane, clouds, background
+- Shane creating all assets: puppy, clouds, background
 - **Puppy will appear on sticker AND website** (Rick doesn't know - surprise bonus!)
 
 **Technical Approach:**
@@ -370,13 +370,22 @@ Two separate but integrated systems:
 ### Deployment Strategy
 
 **Local Development:**
-- http://upwork-trivia.test
-- Herd handles routing
+- http://upwork-trivia.test (NO SSL on local)
+- Laravel Valet handles routing (NOT Herd)
+- Vite dev server for hot module reloading
 
-**Production:**
+**Staging/Testing (DigitalOcean):**
 - https://trivia.sbarron.com
+- Server IP: 157.245.211.127
+- For Rick to test and approve before production
 - MySQL database (not SQLite)
-- Proper session/cache configuration
+- Full production configuration
+
+**Production (SiteGround):**
+- https://poopbagtrivia.com
+- Deployed when Rick approves staging
+- Final production environment
+- MySQL database
 - SSL certificates
 - Real-time websocket configuration
 

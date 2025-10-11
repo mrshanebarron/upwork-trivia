@@ -14,13 +14,13 @@ class AntiCheatService
      * Validate if a submission is allowed
      */
     public function validateSubmission(
-        User $user,
+        ?User $user, // Can be null for guests
         DailyQuestion $question,
         string $ipAddress,
         ?string $deviceFingerprint = null
     ): array {
-        // Check if user already submitted for this question
-        if ($this->hasUserSubmitted($user, $question)) {
+        // Check if user already submitted for this question (only for authenticated users)
+        if ($user && $this->hasUserSubmitted($user, $question)) {
             return [
                 'allowed' => false,
                 'reason' => 'You have already submitted an answer for this question.',
@@ -28,13 +28,12 @@ class AntiCheatService
             ];
         }
 
-        // Check IP rate limiting
-        $maxIpSubmissions = Setting::getValue('max_daily_submissions_per_ip', 3);
-        if ($this->hasIpExceededLimit($ipAddress, $question, $maxIpSubmissions)) {
+        // Check IP rate limiting - one submission per IP per question
+        if ($this->hasIpSubmitted($ipAddress, $question)) {
             return [
                 'allowed' => false,
-                'reason' => "Maximum $maxIpSubmissions submissions per IP address reached for today.",
-                'code' => 'IP_LIMIT_EXCEEDED'
+                'reason' => 'You have already submitted an answer to this question.',
+                'code' => 'ALREADY_SUBMITTED'
             ];
         }
 
@@ -42,13 +41,13 @@ class AntiCheatService
         if ($deviceFingerprint && $this->hasDeviceSubmitted($deviceFingerprint, $question)) {
             return [
                 'allowed' => false,
-                'reason' => 'This device has already submitted an answer for this question.',
-                'code' => 'DEVICE_ALREADY_SUBMITTED'
+                'reason' => 'You have already submitted an answer to this question.',
+                'code' => 'ALREADY_SUBMITTED'
             ];
         }
 
-        // Check if user is of age
-        if (!$user->isOfAge()) {
+        // Check if user is of age (only for authenticated users)
+        if ($user && !$user->isOfAge()) {
             return [
                 'allowed' => false,
                 'reason' => 'You must be 18 or older to participate.',
@@ -70,15 +69,13 @@ class AntiCheatService
     }
 
     /**
-     * Check if IP has exceeded submission limit
+     * Check if IP has already submitted for this question
      */
-    protected function hasIpExceededLimit(string $ipAddress, DailyQuestion $question, int $maxSubmissions): bool
+    protected function hasIpSubmitted(string $ipAddress, DailyQuestion $question): bool
     {
-        $count = Submission::where('ip_address', $ipAddress)
+        return Submission::where('ip_address', $ipAddress)
             ->where('daily_question_id', $question->id)
-            ->count();
-
-        return $count >= $maxSubmissions;
+            ->exists();
     }
 
     /**

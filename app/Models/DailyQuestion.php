@@ -23,6 +23,10 @@ class DailyQuestion extends Model
         'scheduled_for',
         'winner_id',
         'is_active',
+        'source',
+        'external_id',
+        'category',
+        'difficulty',
     ];
 
     protected function casts(): array

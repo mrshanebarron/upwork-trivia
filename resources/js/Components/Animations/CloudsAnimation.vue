@@ -34,7 +34,7 @@
     width: 100%;
     height: 60%;
     pointer-events: none;
-    z-index: 1;
+    z-index: -1;
     overflow: hidden;
 }
 

@@ -27,22 +27,28 @@ class AntiCheatTest extends TestCase
     #[Test]
     public function same_ip_cannot_submit_multiple_times()
     {
+        // Configure setting to allow only 1 submission per IP
+        $setting = \App\Models\Setting::updateOrCreate(
+            ['key' => 'max_daily_submissions_per_ip'],
+            ['value' => '1', 'type' => 'integer']
+        );
+
         $user1 = User::factory()->create(['birthdate' => now()->subYears(25)]);
         $user2 = User::factory()->create(['birthdate' => now()->subYears(25)]);
 
         $ipAddress = '192.168.1.100';
 
         // First user submits from IP
-        $this->actingAs($user1)
-            ->from($ipAddress)
+        $this->withServerVariables(['REMOTE_ADDR' => $ipAddress])
+            ->actingAs($user1)
             ->post(route('contest.submit'), [
                 'question_id' => $this->question->id,
                 'answer' => 'A',
             ]);
 
         // Second user tries from same IP
-        $response = $this->actingAs($user2)
-            ->from($ipAddress)
+        $response = $this->withServerVariables(['REMOTE_ADDR' => $ipAddress])
+            ->actingAs($user2)
             ->post(route('contest.submit'), [
                 'question_id' => $this->question->id,
                 'answer' => 'B',

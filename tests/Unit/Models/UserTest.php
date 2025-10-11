@@ -34,7 +34,6 @@ class UserTest extends TestCase
             'user_id' => $user->id,
             'daily_question_id' => $question->id,
             'prize_amount' => 10.00,
-            'won_at' => now(),
         ]);
 
         $user->refresh();
@@ -48,12 +47,13 @@ class UserTest extends TestCase
         $user = User::factory()->create(['birthdate' => now()->subYears(25)]);
         $question = DailyQuestion::factory()->create();
 
-        Winner::create([
+        $winner = new Winner([
             'user_id' => $user->id,
             'daily_question_id' => $question->id,
             'prize_amount' => 10.00,
-            'won_at' => now()->subDays(31),
         ]);
+        $winner->created_at = now()->subDays(31);
+        $winner->save();
 
         $user->refresh();
 
@@ -131,24 +131,26 @@ class UserTest extends TestCase
         $question1 = DailyQuestion::factory()->create();
         $question2 = DailyQuestion::factory()->create();
 
-        Winner::create([
+        $olderWin = new Winner([
             'user_id' => $user->id,
             'daily_question_id' => $question1->id,
             'prize_amount' => 10.00,
-            'won_at' => now()->subDays(40),
         ]);
+        $olderWin->created_at = now()->subDays(40);
+        $olderWin->save();
 
-        $recentWin = Winner::create([
+        $recentWin = new Winner([
             'user_id' => $user->id,
             'daily_question_id' => $question2->id,
             'prize_amount' => 10.00,
-            'won_at' => now()->subDays(35),
         ]);
+        $recentWin->created_at = now()->subDays(35);
+        $recentWin->save();
 
         $user->refresh();
 
         $this->assertEquals(
-            $recentWin->won_at->format('Y-m-d'),
+            $recentWin->created_at->format('Y-m-d'),
             $user->last_won_at->format('Y-m-d')
         );
     }

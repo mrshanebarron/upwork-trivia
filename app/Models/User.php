@@ -80,7 +80,7 @@ class User extends Authenticatable
     protected function totalWinnings(): \Illuminate\Database\Eloquent\Casts\Attribute
     {
         return \Illuminate\Database\Eloquent\Casts\Attribute::make(
-            get: fn () => $this->giftCards()->where('status', 'delivered')->sum('amount')
+            get: fn () => (float) $this->giftCards()->where('status', 'delivered')->sum('amount')
         );
     }
 
