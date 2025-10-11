@@ -153,74 +153,37 @@ const submitButtonText = computed(() => {
 
                     <!-- Right Column: Content -->
                     <div class="space-y-6">
-                        <!-- Golden Question Section -->
-                        <div v-if="question">
-                            <!-- Contest Header -->
-                            <CartoonCard variant="primary">
-                                <div class="text-center">
-                                    <h1 class="text-3xl font-bold mb-2">Today's Golden Question</h1>
-                                    <p class="text-lg text-gray-800">First correct answer wins ${{ question.prize_amount }}!</p>
-                                </div>
-                            </CartoonCard>
-
-                            <!-- Flash Messages -->
-                            <div v-if="flashMessage"
-                                 class="relative rounded-xl border-2 p-4 shadow-lg"
-                                 :class="{
-                                     'bg-green-50 border-green-500 text-green-800': flashType === 'success',
-                                     'bg-red-50 border-red-500 text-red-800': flashType === 'error',
-                                     'bg-blue-50 border-blue-500 text-blue-800': flashType === 'info'
-                                 }">
-                                <div class="flex justify-between items-start">
-                                    <p class="text-lg font-semibold">{{ flashMessage }}</p>
-                                    <button @click="dismissFlash"
-                                            class="ml-4 text-gray-500 hover:text-gray-700 font-bold text-xl">
-                                        &times;
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Question Card -->
-                            <div v-if="question.has_winner">
-                                <CartoonCard variant="success">
-                                    <p class="text-lg text-gray-800">Today's question already has a winner! Check back tomorrow for a new question.</p>
+                        <!-- Golden Question Teaser -->
+                        <div v-if="question && !question.has_winner">
+                            <Link :href="route('home')">
+                                <CartoonCard variant="primary" class="cursor-pointer hover:shadow-2xl transition-shadow duration-200">
+                                    <div class="text-center">
+                                        <h1 class="text-3xl font-bold mb-2">🏆 Today's Golden Question</h1>
+                                        <p class="text-lg text-gray-800 mb-4">First correct answer wins ${{ question.prize_amount }}!</p>
+                                        <div class="inline-flex items-center gap-2 px-6 py-3 bg-yellow-500 text-gray-900 font-bold rounded-xl hover:bg-yellow-600 transition-colors">
+                                            <span>Click to Answer & Win</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mt-3">Available at participating locations</p>
+                                    </div>
                                 </CartoonCard>
-                            </div>
+                            </Link>
+                        </div>
 
-                            <CartoonCard v-else>
-                                <div class="mb-6">
-                                    <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ question.question_text }}</h2>
-                                </div>
-
-                                <div class="space-y-3 mb-6">
-                                    <label v-for="option in ['A', 'B', 'C', 'D']" :key="option"
-                                           class="flex items-center p-4 bg-white/40 backdrop-blur-sm border-2 border-white/50 rounded-xl cursor-pointer transition-all duration-200"
-                                           :class="{ 'bg-blue-100/60 border-blue-500': selectedAnswer === option }">
-                                        <input type="radio" :value="option" v-model="selectedAnswer" class="h-5 w-5 text-blue-600">
-                                        <span class="ml-3 text-gray-900 text-lg">
-                                            <strong class="text-blue-600">{{ option }}.</strong> {{ question['option_' + option.toLowerCase()] }}
-                                        </span>
-                                    </label>
-                                </div>
-
-                                <!-- Honeypot fields - hidden from users, visible to bots -->
-                                <div style="position: absolute; left: -5000px;" aria-hidden="true">
-                                    <input type="text" v-model="honeypot.website" name="website" tabindex="-1" autocomplete="off">
-                                    <input type="email" v-model="honeypot.email" name="email" tabindex="-1" autocomplete="off">
-                                    <input type="checkbox" v-model="honeypot.subscribe" name="subscribe" tabindex="-1">
-                                </div>
-
-                                <div class="flex justify-center">
-                                    <button @click="submitAnswer" :disabled="!canSubmit || submitting"
-                                            class="px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xl font-bold rounded-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:from-blue-600 hover:to-blue-700 transform hover:scale-105">
-                                        {{ submitButtonText }}
-                                    </button>
+                        <!-- Winner Announcement -->
+                        <div v-else-if="question && question.has_winner">
+                            <CartoonCard variant="success">
+                                <div class="text-center">
+                                    <p class="text-lg text-gray-800 mb-2">Today's Golden Question already has a winner!</p>
+                                    <p class="text-md text-gray-600">Check back tomorrow for a new question.</p>
                                 </div>
                             </CartoonCard>
                         </div>
 
-                        <!-- No Golden Question Message -->
-                        <div v-if="!question">
+                        <!-- No Question Available -->
+                        <div v-else-if="!question">
                             <CartoonCard>
                                 <p class="text-lg text-gray-700 text-center">No Golden Question available today. Check back soon!</p>
                             </CartoonCard>
