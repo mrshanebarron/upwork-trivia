@@ -4,19 +4,19 @@ namespace App\Filament\Resources\TriviaCodes\Pages;
 
 use App\Filament\Resources\TriviaCodes\TriviaCodeResource;
 use Filament\Actions\EditAction;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\TextEntry;
+use Filament\Schemas\Schema;
 
 class ViewTriviaCode extends ViewRecord
 {
     protected static string $resource = TriviaCodeResource::class;
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist
-            ->schema([
+        return $schema
+            ->components([
                 Section::make('Bag Code Information')
                     ->schema([
                         TextEntry::make('code')
