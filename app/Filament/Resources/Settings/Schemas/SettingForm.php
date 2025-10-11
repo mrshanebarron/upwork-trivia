@@ -46,6 +46,14 @@ class SettingForm
                         (!$record && $get('key') === 'about_content')
                     )
                     ->required(fn ($get, $record) => $get('key') === 'about_content' || ($record && $record->key === 'about_content'))
+                    ->formatStateUsing(function ($state) {
+                        // Handle null or empty values
+                        if (empty($state)) {
+                            return null;
+                        }
+                        // If it's already valid HTML/JSON, return as-is
+                        return $state;
+                    })
                     ->helperText('HTML content for the About page. Use the editor to format text.'),
 
                 Textarea::make('value')
