@@ -24,6 +24,33 @@
 
 ---
 
+## 🔐 CREDENTIALS & ACCESS
+
+**CRITICAL: When Shane provides credentials, ALWAYS save them immediately to this file.**
+
+### Production Server (SiteGround)
+- **Host:** ssh.poopbagtrivia.com
+- **Port:** 18765
+- **User:** u2584-wwotcszcpd9n
+- **SSH Key:** ~/.ssh/poopbagtrivia_deploy
+- **Public Key:** ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+RUPWVIv95e4dCzF/Eqo7WIL7/xOtdeZtkcKF5APGE
+- **Password:** [Pending - will be pasted by Shane]
+- **Remote Directory:** public_html
+- **URL:** https://poopbagtrivia.com
+
+### Admin Panel Credentials
+- **Local:** http://upwork-trivia.test/admin
+  - Email: admin@upwork-demo.com
+  - Password: DemoPass2024!
+- **Production:** https://poopbagtrivia.com/admin
+  - Email: admin@trivia.test
+  - Password: PassW0rd
+
+### Deployment Automation
+**When credentials are saved, update deploy-to-production.sh to use them automatically.**
+
+---
+
 ## 📚 PROJECT DOCUMENTATION
 
 **Core Documents:**

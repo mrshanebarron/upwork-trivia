@@ -16,8 +16,8 @@ echo ""
 # Configuration
 SSH_HOST="ssh.poopbagtrivia.com"
 SSH_PORT="18765"
-SSH_USER="upwokfnm"
-REMOTE_DIR="public_html"
+SSH_USER="u2584-wwotcszcpd9n"
+REMOTE_DIR="www/poopbagtrivia.com/app"
 BRANCH="master"
 
 # Colors for output
@@ -72,7 +72,7 @@ set -e
 echo "=========================================="
 echo "📦 Pulling Latest Code"
 echo "=========================================="
-cd public_html
+cd www/poopbagtrivia.com/app
 
 # Stash any local changes (shouldn't be any)
 git stash 2>/dev/null || true
@@ -88,7 +88,7 @@ echo "🔨 Building Frontend Assets"
 echo "=========================================="
 
 # Build fresh frontend assets with Vue changes
-npm ci --prefer-offline
+npm ci --prefer-offline --legacy-peer-deps
 npm run build
 echo "✓ Frontend assets built"
 
