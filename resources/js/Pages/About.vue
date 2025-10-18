@@ -57,18 +57,6 @@ onUnmounted(() => {
                           :class="isScrolled ? 'text-gray-800 hover:text-gray-600' : 'text-white hover:text-yellow-300'">
                         Privacy
                     </Link>
-
-                    <!-- Auth Links -->
-                    <template v-if="$page.props.auth.user">
-                        <Link :href="route('logout')" method="post" as="button" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-bold text-sm rounded-lg transition-colors">
-                            Logout
-                        </Link>
-                    </template>
-                    <template v-else>
-                        <Link :href="route('login')" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold text-sm rounded-lg transition-colors">
-                            Login
-                        </Link>
-                    </template>
                 </nav>
             </div>
         </div>
