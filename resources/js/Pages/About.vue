@@ -60,10 +60,6 @@ onUnmounted(() => {
 
                     <!-- Auth Links -->
                     <template v-if="$page.props.auth.user">
-                        <Link :href="route('dashboard')" class="font-bold text-sm sm:text-base transition-colors"
-                              :class="isScrolled ? 'text-gray-800 hover:text-gray-600' : 'text-white hover:text-yellow-300'">
-                            Dashboard
-                        </Link>
                         <Link :href="route('logout')" method="post" as="button" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-bold text-sm rounded-lg transition-colors">
                             Logout
                         </Link>
