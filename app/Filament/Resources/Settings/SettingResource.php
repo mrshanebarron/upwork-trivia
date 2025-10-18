@@ -22,8 +22,6 @@ class SettingResource extends Resource
 
     protected static ?string $navigationLabel = 'Site Pages';
 
-    protected static ?string $navigationGroup = 'Content';
-
     protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
