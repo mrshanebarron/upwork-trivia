@@ -27,6 +27,8 @@ class TriviaCodeResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Bag Codes';
 
+    protected static bool $shouldRegisterNavigation = false;
+
     public static function form(Schema $schema): Schema
     {
         return TriviaCodeForm::configure($schema);

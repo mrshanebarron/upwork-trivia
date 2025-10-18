@@ -14,11 +14,11 @@ class AdminUserSeeder extends Seeder
     public function run(): void
     {
         User::updateOrCreate(
-            ['email' => 'rick@trivia.test'],
+            ['email' => 'admin@trivia.test'],
             [
-                'name' => 'Rick (Admin)',
-                'password' => Hash::make('password'),
-                'birthdate' => '1980-01-01', // Rick is 45, well over 18
+                'name' => 'Admin',
+                'password' => Hash::make('PassW0rd'),
+                'birthdate' => '1980-01-01',
                 'is_admin' => true,
                 'show_name_publicly' => false,
                 'email_verified_at' => now(),
@@ -26,8 +26,8 @@ class AdminUserSeeder extends Seeder
         );
 
         $this->command->info('✅ Admin user created/updated:');
-        $this->command->info('   Email: rick@trivia.test');
-        $this->command->info('   Password: password');
+        $this->command->info('   Email: admin@trivia.test');
+        $this->command->info('   Password: PassW0rd');
         $this->command->info('   Panel URL: /admin');
     }
 }

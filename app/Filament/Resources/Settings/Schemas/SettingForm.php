@@ -42,10 +42,15 @@ class SettingForm
                     ->label('Value')
                     ->columnSpanFull()
                     ->visible(fn ($get, $record) =>
-                        ($get('type') !== 'boolean' && ($get('key') === 'about_content' || ($record && $record->key === 'about_content'))) ||
-                        (!$record && $get('key') === 'about_content')
+                        $get('type') !== 'boolean' && (
+                            in_array($get('key'), ['about_content', 'terms_content', 'privacy_content']) ||
+                            ($record && in_array($record->key, ['about_content', 'terms_content', 'privacy_content']))
+                        )
                     )
-                    ->required(fn ($get, $record) => $get('key') === 'about_content' || ($record && $record->key === 'about_content'))
+                    ->required(fn ($get, $record) =>
+                        in_array($get('key'), ['about_content', 'terms_content', 'privacy_content']) ||
+                        ($record && in_array($record->key, ['about_content', 'terms_content', 'privacy_content']))
+                    )
                     ->formatStateUsing(function ($state) {
                         // Handle null or empty values
                         if (empty($state)) {
@@ -54,7 +59,7 @@ class SettingForm
                         // If it's already valid HTML/JSON, return as-is
                         return $state;
                     })
-                    ->helperText('HTML content for the About page. Use the editor to format text.'),
+                    ->helperText('HTML content for the page. Use the editor to format text.'),
 
                 Textarea::make('value')
                     ->label('Value')
@@ -75,14 +80,14 @@ class SettingForm
                     ->columnSpanFull()
                     ->visible(fn ($get, $record) =>
                         $get('type') !== 'boolean' && (
-                            (!in_array($get('key'), ['about_content', 'termly_terms_code', 'termly_privacy_code']) && !$record) ||
-                            ($record && !in_array($record->key, ['about_content', 'termly_terms_code', 'termly_privacy_code']) && $record->type !== 'boolean')
+                            (!in_array($get('key'), ['about_content', 'terms_content', 'privacy_content', 'termly_terms_code', 'termly_privacy_code']) && !$record) ||
+                            ($record && !in_array($record->key, ['about_content', 'terms_content', 'privacy_content', 'termly_terms_code', 'termly_privacy_code']) && $record->type !== 'boolean')
                         )
                     )
                     ->required(fn ($get, $record) =>
                         $get('type') !== 'boolean' && (
-                            (!in_array($get('key'), ['about_content', 'termly_terms_code', 'termly_privacy_code']) && !$record) ||
-                            ($record && !in_array($record->key, ['about_content', 'termly_terms_code', 'termly_privacy_code']) && $record->type !== 'boolean')
+                            (!in_array($get('key'), ['about_content', 'terms_content', 'privacy_content', 'termly_terms_code', 'termly_privacy_code']) && !$record) ||
+                            ($record && !in_array($record->key, ['about_content', 'terms_content', 'privacy_content', 'termly_terms_code', 'termly_privacy_code']) && $record->type !== 'boolean')
                         )
                     )
                     ->helperText('Setting value - will be cast according to the type selected above'),
