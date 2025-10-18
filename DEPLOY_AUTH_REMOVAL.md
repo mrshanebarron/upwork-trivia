@@ -33,7 +33,12 @@ php artisan view:clear
 php artisan cache:clear
 ```
 
-### 4. Verify Deployment
+### 4. Create Admin User
+```bash
+php artisan db:seed --class=AdminUserSeeder --force
+```
+
+### 5. Verify Deployment
 - Visit https://poopbagtrivia.com - should load without login/register links
 - Visit https://poopbagtrivia.com/admin - should show Filament login (for Rick)
 - Test Rick can log in to admin panel
@@ -53,7 +58,9 @@ php artisan cache:clear
 
 ## Admin Panel (Unchanged)
 - Rick logs in at: https://poopbagtrivia.com/admin
-- Same credentials as before
+- **Credentials:**
+  - Email: `admin@trivia.test`
+  - Password: `PassW0rd`
 - All Filament admin features work normally
 
 ## Files Modified

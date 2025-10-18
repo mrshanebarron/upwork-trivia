@@ -117,12 +117,25 @@ echo "✓ Views cached"
 
 echo ""
 echo "=========================================="
+echo "👤 Creating Admin User"
+echo "=========================================="
+
+# Create/update admin user for Filament panel
+php artisan db:seed --class=AdminUserSeeder --force
+echo "✓ Admin user created"
+
+echo ""
+echo "=========================================="
 echo "✅ Deployment Complete!"
 echo "=========================================="
 echo ""
 echo "Please verify:"
 echo "1. Homepage: https://poopbagtrivia.com"
 echo "2. Admin Panel: https://poopbagtrivia.com/admin"
+echo ""
+echo "📋 Admin Login Credentials:"
+echo "   Email: admin@trivia.test"
+echo "   Password: PassW0rd"
 echo ""
 
 ENDSSH
@@ -140,7 +153,7 @@ if [ $? -eq 0 ]; then
     echo ""
     echo "[ ] 2. Visit https://poopbagtrivia.com/admin"
     echo "    → Verify Filament admin panel loads"
-    echo "    → Test Rick can log in"
+    echo "    → Login with: admin@trivia.test / PassW0rd"
     echo ""
     echo "[ ] 3. Check browser console for errors"
     echo ""
