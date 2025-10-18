@@ -13,21 +13,28 @@ class SettingsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn ($query) => $query->whereIn('key', [
+                'about_content',
+                'termly_terms_code',
+                'termly_privacy_code',
+            ]))
             ->columns([
                 TextColumn::make('key')
-                    ->searchable(),
-                TextColumn::make('type')
+                    ->label('Page')
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'about_content' => 'About Page',
+                        'termly_terms_code' => 'Terms of Service',
+                        'termly_privacy_code' => 'Privacy Policy',
+                        default => $state,
+                    })
                     ->searchable(),
                 TextColumn::make('description')
-                    ->searchable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
+                    ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Last Updated'),
             ])
             ->filters([
                 //
@@ -36,9 +43,7 @@ class SettingsTable
                 EditAction::make(),
             ])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                // No bulk actions - prevent accidental deletion of page content
             ]);
     }
 }

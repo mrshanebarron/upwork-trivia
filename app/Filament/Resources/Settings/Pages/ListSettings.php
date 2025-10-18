@@ -13,7 +13,7 @@ class ListSettings extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            // No create action - only edit existing pages
         ];
     }
 }
