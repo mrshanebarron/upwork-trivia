@@ -84,6 +84,16 @@ git pull origin master
 
 echo ""
 echo "=========================================="
+echo "🔨 Building Frontend Assets"
+echo "=========================================="
+
+# Build fresh frontend assets with Vue changes
+npm ci --prefer-offline
+npm run build
+echo "✓ Frontend assets built"
+
+echo ""
+echo "=========================================="
 echo "🧹 Clearing Laravel Caches"
 echo "=========================================="
 
